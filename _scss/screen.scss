@@ -1,0 +1,36 @@
+@import 'base';
+
+.container {
+	margin: 10px;
+}
+
+.form ,
+.bg-danger {
+	max-width: 400px;
+}
+
+.videos {
+	@include clearfix;
+}
+
+header {
+	margin: 10px;
+	margin-top: 20px;
+	font-size: 3em;
+	color: #000;
+}
+
+devine-video {
+	position: relative;
+	float: left;
+	margin: 10px;
+}
+
+.form {
+	margin-left: 10px;
+	margin-top: 20px;
+}
+
+.btn-primary {
+	margin-top: 20px;
+}

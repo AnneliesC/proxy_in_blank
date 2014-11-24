@@ -1,0 +1,39 @@
+{
+	"stylesheets": {
+		"src":{
+			"folder": "_scss",
+			"file":"**/*.scss"
+		},
+		"dest": {
+			"folder":"public/css",
+			"file":"screen.css"
+		}
+	},
+	"components": {
+		"src":{
+			"folder": "_components",
+			"templates":"**/*.html",
+			"all":"**/*.*"
+		},
+		"dest": {
+			"folder":"public/components"
+		}
+	},
+	"scripts": {
+		"src":{
+			"folder": "_js",
+			"file":"**/*.js",
+			"entry_file":"app.js"
+		},
+		"dest": {
+			"folder":"public/js",
+			"file":"app.js"
+		}
+	},
+	"shared": {
+		"src":{
+			"folder": "classes",
+			"file":"**/*.js"
+		}
+	}
+}

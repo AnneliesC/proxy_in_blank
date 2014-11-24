@@ -1,0 +1,14 @@
+_components/
+_js/
+_scss/
+.sass-cache/
+node_modules/
+.bowerrc
+.editorconfig
+.jshintrc
+.scss-lint.yml
+bower.json
+config.json
+gulpfile.js
+.DS_Store
+.env

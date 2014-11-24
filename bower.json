@@ -1,0 +1,19 @@
+{
+  "name": "devineroulette",
+  "version": "0.0.1",
+  "authors": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2",
+    "peerjs": "~0.3.11",
+    "underscore": "~1.7.0",
+    "polymer": "~0.4.2"
+  }
+}
