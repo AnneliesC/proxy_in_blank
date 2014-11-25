@@ -1,7 +1,7 @@
 {
-  "name": "flygame",
+  "name": "devineroulette",
   "version": "0.0.1",
-  "description": "rmd3 assignment",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "forever --minUptime 1000 --spinSleeptime 1000 ."
