@@ -8,20 +8,6 @@ var Status = {
 	"streaming": 4
 };
 
-function onPeerOpen(peerId) {
-	this.peerId = peerId;
-	this.socket.emit('peer_id', peerId);
-	this.status = Status.ready;
-	this.fire("connected");
-}
-
-function clickHandler(e){
-	e.preventDefault();
-	if(this.status !== Status.not_ready){
-		this.status = Status.searching;
-	}
-}
-
 function callStreamHandler(stream) {
 	this.status = Status.streaming;
 	this.fire("strangerfound", {stream: stream});
@@ -32,28 +18,44 @@ function callCloseHandler() {
 	this.status = Status.searching;
 }
 
-function onConnectedStranger(stranger) {
-	this.status = Status.paired;
-	var call = this.peer.call(stranger.peerId, this.stream);
-	call.on('stream', callStreamHandler.bind(this));
-	call.on('close', callCloseHandler.bind(this));
+function onPeerOpen(peerId) {
+	console.log("peer open");
+	this.peerId = peerId;
+	this.socket.emit('peer_id', peerId);
+	this.status = Status.ready;
+	this.fire("connected");
 }
 
 function onPeerCall(call) {
+	console.log("peer call");
 	call.answer(this.stream);
 	call.on('stream', callStreamHandler.bind(this));
 	call.on('close', callCloseHandler.bind(this));
 }
 
 function initPeer() {
+	console.log("init peer");
 	this.peer = new Peer({key: this.peerapikey});
 	this.peer.on('open', onPeerOpen.bind(this));
 	this.peer.on('call', onPeerCall.bind(this));
 }
 
+function onConnectedStranger(stranger) {
+	console.log("connected stranger");
+	this.status = Status.paired;
+	var call = this.peer.call(stranger.peerId, this.stream);
+	call.on('stream', callStreamHandler.bind(this));
+	call.on('close', callCloseHandler.bind(this));
+}
+
 function onSocketId(socketId) {
+	console.log("init socket");
 	this.socketId = socketId;
 	initPeer.call(this);
+}
+
+function clickHandler(e){
+	e.preventDefault();
 }
 
 Polymer({
@@ -67,27 +69,19 @@ Polymer({
 	socketId: undefined,
 	peerId: undefined,
 
-	status: Status.not_ready,
+	status: Status.ready,
 
 	statusChanged: function() {
+		console.log("update status to " + this.status);
 		this.socket.emit("update_status", this.status);
-		if(this.status !== Status.not_ready){
-			this.$.connect.classList.remove("disabled");
-		}else{
-			this.$.connect.classList.add("disabled");
-		}
 	},
 
 	ready: function(){
-		this.$.connect.classList.add("disabled");
 		this.$.connect.addEventListener("click", clickHandler.bind(this));
-	},
-
-	connect: function(stream) {
-		this.stream = stream;
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
+		this.status = Status.searching;
 	}
 
 });

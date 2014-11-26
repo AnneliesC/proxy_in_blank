@@ -12,7 +12,7 @@ require("./config/handlebars.js")(app);
 var mongoose = require("./config/mongoose.js")();
 
 //** MODULES **//
-require("./modules/roulette.js")(server);
+require("./modules/cosmic-race.js")(server);
 
 //** ROUTES **//
 require("./controllers/pages.js")(app);
