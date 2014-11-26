@@ -2,7 +2,7 @@
 	<link rel="import" href="/components/cosmic-race-qr-code.html"/>
 {{/section}}
 
-	<cosmic-race-qr-code peerapikey="jvd4f21h0lhumcxr"></cosmic-race-qr-code>
+	<cosmic-race-qr-code peerapikey="jvd4f21h0lhumcxr" urlid={{urlid}}></cosmic-race-qr-code>
 
 	<!-- html van de index -->
 	INDEX
@@ -10,5 +10,6 @@
 {{#section "scripts"}}
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/vendor/peerjs/peer.min.js"></script>
+	<script src="/js/vendor/seedrandom/seedrandom.min.js"></script>
 	<script src="/js/app.js"></script>
 {{/section}}

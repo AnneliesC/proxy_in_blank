@@ -11,6 +11,7 @@ var Status = {
 function callStreamHandler(stream) {
 	this.status = Status.streaming;
 	this.fire("strangerfound", {stream: stream});
+	// event versturen dat een connectie gemaakt is
 }
 
 function callCloseHandler() {
@@ -54,17 +55,32 @@ function onSocketId(socketId) {
 	initPeer.call(this);
 }
 
-function clickHandler(e){
-	e.preventDefault();
+/* GENERATING & READING URL */
+
+function randomUrl(response) {
+    console.log("ip: ",response.ip);
+    var ip = response.ip;
+    this.id = ip;
+		//var rng = seedrandom('hello.');
+		//console.log(rng());
+}
+
+function generateUrl(){
+    console.log("generate ip");
+		var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "http://www.telize.com/jsonip?callback=randomUrl";
+    document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 Polymer({
 
-	label: "connect",
+	//label: "connect",
 	peerapikey: undefined,
 
 	peer: undefined,
-	stream: undefined,
+	urlid: undefined,
+	//stream: undefined,
 
 	socketId: undefined,
 	peerId: undefined,
@@ -80,12 +96,14 @@ Polymer({
 		}
 	},
 
+	urlidChanged: function() {
+		console.log("urlid changed");
+	},
+
 	ready: function(){
-		this.$.connect.addEventListener("click", clickHandler.bind(this));
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
-		//this.status = Status.searching;
 	}
 
 });
