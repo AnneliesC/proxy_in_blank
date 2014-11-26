@@ -22,7 +22,7 @@ function onPeerOpen(peerId) {
 	console.log("peer open");
 	this.peerId = peerId;
 	this.socket.emit('peer_id', peerId);
-	this.status = Status.ready;
+	this.status = Status.searching;
 	this.fire("connected");
 }
 
@@ -74,6 +74,10 @@ Polymer({
 	statusChanged: function() {
 		console.log("update status to " + this.status);
 		this.socket.emit("update_status", this.status);
+		if(this.Status === Status.paired)
+		{
+			this.fire("");
+		}
 	},
 
 	ready: function(){
@@ -81,7 +85,7 @@ Polymer({
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
-		this.status = Status.searching;
+		//this.status = Status.searching;
 	}
 
 });

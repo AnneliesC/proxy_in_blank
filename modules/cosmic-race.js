@@ -9,7 +9,7 @@ module.exports = function(server){
 
 	function search_stranger(socket){
 
-		console.log('[Server] search_stranger', socket.id);
+		console.log('[Server] search_stranger (socket id)', socket.id);
 
 		var client = _.findWhere(clients,{socketId: socket.id});
 		if(client === undefined){
@@ -30,7 +30,7 @@ module.exports = function(server){
 			var stranger = list[_.random(0,list.length-1)];
 			client.status = Status.paired;
 			stranger.status = Status.paired;
-			console.log('[Server] pair', client.peerId, stranger.peerId);
+			console.log('[Server] pair (peer id)', client.peerId, stranger.peerId);
 			socket.emit('connected_stranger', stranger);
 		}
 
