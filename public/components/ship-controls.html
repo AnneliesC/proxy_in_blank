@@ -1,4 +1,10 @@
-/* jshint newcap: false */
+<link rel="import" href="/js/vendor/polymer/polymer.html"/>
+<polymer-element name="ship-controls" attributes="label peerapikey urlid">
+	<template>
+				<style></style>
+				<a href="#" id="shoot">shoot</a>
+	</template>
+	  <script>/* jshint newcap: false */
 
 var Status = {
 	"not_ready": 0,
@@ -94,11 +100,23 @@ Polymer({
 		}
 	},
 
+	urlidChanged: function() {
+		console.log("urlid changed");
+		if(!this.urlid){
+			generateUrl.bind(this)();
+			//generateUrl();
+		}else{
+			this.socket.emit('urlid', parseInt(this.urlid));
+		}
+	},
+
 	ready: function(){
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
-		generateUrl.bind(this)();
+		//this.socket.emit('urlid', 33333);
 	}
 
 });
+</script>
+	</polymer-element>

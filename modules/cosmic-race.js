@@ -12,28 +12,37 @@ module.exports = function(server){
 		console.log('[Server] search_stranger (socket id)', socket.id);
 
 		var client = _.findWhere(clients,{socketId: socket.id});
+
 		if(client === undefined){
 			return;
 		}
+
+		// lijst maken met strangers (clients zonder zichzelf)
+		var strangers = _.filter(clients, function(stranger){
+			return stranger.socketId !== client.socketId;
+		});
+
+		console.log("CLIENTS 2", strangers);
 
 		if(client.status !== Status.searching){
 			return;
 		}
 
-		var list = _.filter(clients, function(client){
-			return client.socketId !== socket.id && client.status === Status.searching;
+		var list = _.filter(strangers, function(stranger){
+			return stranger.status === Status.searching && stranger.urlid === client.urlid;
 		});
+
+		console.log("LIST ", list);
 
 		if(list.length === 0){
 			setTimeout(search_stranger, 2000, socket);
 		}else{
-			var stranger = list[_.random(0,list.length-1)];
+			var stranger = list[0];
 			client.status = Status.paired;
 			stranger.status = Status.paired;
 			console.log('[Server] PAIR (peer id)', client.peerId, stranger.peerId);
 			socket.emit('connected_stranger', stranger);
 		}
-
 	}
 
 	io.on('connection', function(socket) {
@@ -44,8 +53,6 @@ module.exports = function(server){
 		};
 
 		clients.push(client);
-
-		socket.emit("socket_id",client.socketId);
 
 		socket.on('disconnect', function() {
 			clients = _.filter(clients, function(client) {
@@ -65,6 +72,13 @@ module.exports = function(server){
 				search_stranger(socket);
 			}
 		});
+
+		socket.on('urlid',function(urlid){
+			console.log('[Server] urlid', urlid);
+			client.urlid = urlid;
+		});
+
+		socket.emit("socket_id",client.socketId);
 
 	});
 };

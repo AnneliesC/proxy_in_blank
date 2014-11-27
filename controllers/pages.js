@@ -3,12 +3,13 @@
 module.exports = function(app){
 
 	app.get("/", function(req,res){
+		// render index -> url wordt gegenereerd in een component
 		res.render("index",{title: "Setup"});
 	});
 
 	app.get("/:id", function(req,res){
-		// url id meegeven aan
-		res.render("index",{title: "Setup", urlid: req.params.id});
+		// als er een id in de url aanwezig is -> render controls pagina (mobile)
+		res.render("controls",{title: "Controls", urlid: req.params.id});
 	});
 
 	app.get("/game", function(req,res){

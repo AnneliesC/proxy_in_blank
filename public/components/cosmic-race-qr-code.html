@@ -2,7 +2,7 @@
 <polymer-element name="cosmic-race-qr-code" attributes="label peerapikey">
 	<template>
 				<style></style>
-				<a href="" id="connect">{{label}}</a>
+				<a href="#" id="randomurl"></a>
 	</template>
 	  <script>/* jshint newcap: false */
 
@@ -63,20 +63,18 @@ function onSocketId(socketId) {
 
 /* GENERATING & READING URL */
 
-function randomUrl(response) {
-    console.log("ip: ",response.ip);
-    var ip = response.ip;
-    this.id = ip;
-		//var rng = seedrandom('hello.');
-		//console.log(rng());
-}
-
 function generateUrl(){
     console.log("generate ip");
-		var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "http://www.telize.com/jsonip?callback=randomUrl";
-    document.getElementsByTagName("head")[0].appendChild(script);
+
+    // vervangen door ip adres
+    var random = Math.floor(Math.random() * (999 - 0 + 1)) + 0;
+
+		//var rng = seedrandom('hello.');
+		//console.log(rng());
+
+		var randomCode = random; // met seed (als ip adres gebruikt wordt)
+		this.socket.emit('urlid', randomCode);
+		console.log("random url: http://localhost:3000/"+randomCode);
 }
 
 Polymer({
@@ -102,14 +100,11 @@ Polymer({
 		}
 	},
 
-	urlidChanged: function() {
-		console.log("urlid changed");
-	},
-
 	ready: function(){
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
+		generateUrl.bind(this)();
 	}
 
 });

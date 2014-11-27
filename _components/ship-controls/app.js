@@ -94,11 +94,21 @@ Polymer({
 		}
 	},
 
+	urlidChanged: function() {
+		console.log("urlid changed");
+		if(!this.urlid){
+			generateUrl.bind(this)();
+			//generateUrl();
+		}else{
+			this.socket.emit('urlid', parseInt(this.urlid));
+		}
+	},
+
 	ready: function(){
 		this.socket = io('/');
 		this.socket.on('socket_id', onSocketId.bind(this));
 		this.socket.on("connected_stranger", onConnectedStranger.bind(this));
-		generateUrl.bind(this)();
+		//this.socket.emit('urlid', 33333);
 	}
 
 });
