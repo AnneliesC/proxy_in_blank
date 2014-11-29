@@ -29,8 +29,8 @@ function Comet(position){
 	var min_speed = 4;
 	var max_speed = 7;
 
-	var min_radius = 10;
-	var max_radius = 30;
+	var min_radius = 25;
+	var max_radius = 50;
 
 	this.radius = min_radius + Math.round(Math.random()*(max_radius-min_radius));
 	this.speed = min_speed + Math.round(Math.random()*(max_speed-min_speed));

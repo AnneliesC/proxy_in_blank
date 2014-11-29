@@ -44,7 +44,7 @@ body{
 }
 
 .gameStarted	{
-	/*animation: animatedBg 50s linear infinite;*/
+	animation: animatedBg 50s linear infinite;
 }
 
 video{
@@ -438,12 +438,19 @@ header{
 			height: 100%;
 		}
 	}
-	.tips{
+	#tips{
 		position: absolute;
 		top: 300px;
 		width: 100%;
 		text-align: center;
 		font-size: 3em;
+	}
+	#countdown{
+		position: absolute;
+		top: 220px;
+		width: 100%;
+		text-align: center;
+		font-size: 5em;
 	}
 	#scoreboard{
 		margin-left: auto;
@@ -616,7 +623,7 @@ header{
 	figure{
 			display: block;
 			position: absolute;
-			bottom: 0px;
+			bottom: -120px;
 			left: 47%;
 		img{
 			-webkit-transform: scale(0.6, 0.6);

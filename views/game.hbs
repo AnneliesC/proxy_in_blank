@@ -16,19 +16,20 @@
     <div class="webcam">
 			<div><video id="webcamPreview" autoplay loop width="210" height="160" style="width: 210px"></video></div>
     </div>
-    <div class="tips">"klap in je handen om de laser af te vuren"</div>
+    <div id="countdown"></div>
+    <div id="tips">"klap in je handen om de laser af te vuren"</div>
     <section id="scoreboard">
         <div class="scoreInfo">
             <header><h2><span>scoreboard</span></h2></header>
             <div id="score" class="left">
-                <p>Score<br/><span>9999</span></p>
+                <p>Score<br/><span id="lblScore">9999</span></p>
             </div>
             <div id="time" class="right">
-                <p>Tijd<br/><span>00: 30</span></p>
+                <p>Tijd<br/><span id="lblTime">00: 30</span></p>
             </div>
         </div>
-        <a href="index.html" id="btnBack" class="left"><span>btnBack</span></a>
-        <a href="highscore.html" id="btnInfo" class="right"><span>btnInfo</span></a>
+        <a href="./" id="btnBack" class="left"><span>btnBack</span></a>
+        <a href="#" id="btnInfo" class="right"><span>btnInfo</span></a>
     </section>
 
     <svg xmlns="http://www.w3.org/2000/svg"

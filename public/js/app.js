@@ -4,21 +4,10 @@
 	var Util = require("./modules/util/Util");
 	var Webcam = require("./modules/video/Webcam");
 	var Comet = require("./modules/gameElements/Comet");
+	var Laser = require("./modules/gameElements/Laser");
 
 	var videoInput = document.getElementById("webcamPreview");
 	var canvasInput = document.getElementById("compare");
-
-	// Global Variables for Audio
-  var audioContext;
-  var analyserNode;
-  var javascriptNode;
-  var sampleSize = 1024;  // number of samples to collect before analyzing
-                          // decreasing this gives a faster sonogram, increasing it slows it down
-  var amplitudeArray;     // array to hold frequency data
-  var audioStream;
-
-  //positie van raket bijhouden voor rotatie aan te passen
-	var prevXpos = 630;
 
 	var statusMessages = {
 		"whitebalance": "checking for stability of camera whitebalance",
@@ -30,7 +19,7 @@
 	};
 
 	var supportMessages = {
-		"no getUserMedia": "Unfortunately, <a href='http://dev.w3.org/2011/webrtc/editor/getusermedia.html'>getUserMedia</a> is not supported in your browser. Try <a href='http://www.opera.com/browser/'>downloading Opera 12</a> or <a href='http://caniuse.com/stream'>another browser that supports getUserMedia</a>. Now using fallback video for facedetection.",
+		"no getUserMedia": "Unfortunately, getUserMedia is not supported in your browser",
 		"no camera": "No camera found. Using fallback video for facedetection."
 	};
 
@@ -43,8 +32,24 @@
 
 	// enkel op game pagina
 	var spaceship = document.getElementById("rocket");
+	var btnInfo = document.getElementById("btnInfo");
+	var lblScore = document.getElementById("lblScore");
+	var lblTime = document.getElementById("lblTime");
+	var lblCountdown = document.getElementById("countdown");
+	var lblTips = document.getElementById("tips");
 	var svg = document.querySelector("svg");
-	var bounds;
+	var bounds,xPosSpaceship,comets,lasers,time;
+	var countdownTime = 3;
+	var countdownInterval,timerInterval,cometsInterval;
+	var score,time;
+
+  var audioContext;
+  var analyserNode;
+  var javascriptNode;
+  var sampleSize = 1024;
+  var amplitudeArray;
+  var audioStream;
+	//var prevXpos = 630;
 
 	function init(){
 
@@ -58,15 +63,15 @@
 		if(document.querySelector("body").getAttribute("class")){
 			page = "game";
 		}
-		console.log("PAGE",page);
 
 		getUserMedia();
-		initAudio();
 		initWebcam();
+
 		if(page === "game"){
-			initGameSettings();
+			resetGameSettings();
+			btnInfo.addEventListener("click", btnInfoClickHandler);
 		}else if(page === "index"){
-			btnStart.addEventListener("click", btnStartClickHandler.bind(this));
+			btnStart.addEventListener("click", btnStartClickHandler);
 		}
 	}
 
@@ -75,46 +80,125 @@
 		window.location = "./game";
 	}
 
-	function createComets(){
-
-		(function(){
-		    setTimeout(arguments.callee, 1800);
-
-		    var comet = new Comet(Util.randomStartPoint(bounds));
-		    comet.target = {x:comet.position.x,y:window.innerHeight+comet.radius*2};
-				comet.move = true;
-				bean.on(comet,"done",function(){
-					svg.removeChild(comet.element);
-				});
-				svg.appendChild(comet.element)
-		})();
+	function btnInfoClickHandler(event){
+		event.preventDefault();
 	}
 
-	function initGameSettings(){
+	/* GAME LOGIC  */
+
+	function createComet(){
+    var comet = new Comet(Util.randomStartPointTop(bounds));
+    comet.target = {x:comet.position.x,y:window.innerHeight+comet.radius*2};
+		comet.move = true;
+		bean.on(comet,"done",function(){
+			svg.removeChild(comet.element);
+			comets.splice(comets.indexOf(comet),1);
+		});
+		svg.appendChild(comet.element);
+		comets.push(comet);
+
+		for(var i=0;i<lasers.length;i++){
+			lasers[i].comets = comets;
+		}
+	}
+
+	function createLaser(){
+		var laser = new Laser({x:xPosSpaceship,y:window.innerHeight-120},comets);
+  	laser.target = {x:laser.position.x,y:50};
+		laser.move = true;
+		bean.on(laser,"top",function(){
+			svg.removeChild(laser.element);
+			lasers.splice(lasers.indexOf(laser),1);
+		});
+		bean.on(laser,"hit",function(){
+			svg.removeChild(laser.hit.element);
+			comets.splice(comets.indexOf(laser.hit),1);
+			svg.removeChild(laser.element);
+			lasers.splice(lasers.indexOf(laser),1);
+			score = score + 5;
+			updateLabels();
+		});
+		svg.appendChild(laser.element);
+		lasers.push(laser);
+	}
+
+	function resetGameSettings(){
+		comets = [];
+		lasers = [];
+		score = 0;
+		time = 0;
+		lblScore.innerHTML = "0";
+		lblTime.innerHTML = "00:00";
+	}
+
+	function updateLabels(){
+		var minutes = Math.floor(time/60);
+		var seconds = time - minutes * 60;
+		if(minutes.toString().length === 1) minutes = "0"+minutes;
+		if(seconds.toString().length === 1) seconds = "0"+seconds;
+
+		lblScore.innerHTML = score;
+		lblTime.innerHTML = minutes+":"+seconds;
+	}
+
+	function timer(){
+		time = time + 1;
+		score = score + 2;
+		updateLabels();
+	}
+
+	function startGame(){
 		console.log("[App] init game settings");
-		createComets();
+		cometsInterval = setInterval(createComet, 4000);
+		timerInterval = setInterval(timer, 1000);
 	}
+
+	function countdown(){
+		countdownTime = countdownTime - 1;
+		lblCountdown.innerHTML = countdownTime;
+		if(countdownTime < 0){
+			clearInterval(countdownInterval);
+			document.getElementById("game").removeChild(lblCountdown);
+			document.getElementById("game").removeChild(lblTips);
+			startGame();
+		}
+	}
+
+	function startCountDown(){
+		lblCountdown.innerHTML = countdownTime;
+		countdownInterval = setInterval(countdown, 1000);
+	}
+
+	/* WEBCAM */
 
 	function userErrorHandler(error){
 		console.log("[Webcam] video error");
 	}
 
 	function getUserMedia(){
-		navigator.getUserMedia = ( navigator.getUserMedia ||
-                           navigator.webkitGetUserMedia ||
-                           navigator.mozGetUserMedia ||
-                           navigator.msGetUserMedia);
+		navigator.getUserMedia = (
+			navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia);
 	}
 
 	function initWebcam(){
 		if (navigator.getUserMedia) {
-			navigator.getUserMedia({audio: true, video: true}, setupAudioNodes,userErrorHandler);
+			navigator.getUserMedia({audio: true, video: true}, initVideoAudio,userErrorHandler);
 		} else {
 			console.log("[Webcam] fallback");
 		}
 	}
 
-	function initAudio(){
+	function initVideo(stream){
+		videoInput.setAttribute("src",window.URL.createObjectURL(stream));
+		startCountDown();
+	}
+
+	/* DETECT CLAPPING  */
+
+	function initAudioContext(){
 		console.log("[App] initializing Audio");
 		window.requestAnimFrame = (function(){
       return  window.requestAnimationFrame       ||
@@ -132,44 +216,39 @@
     try {
       audioContext = new AudioContext();
     } catch(e) {
-      alert('Web Audio API is not supported in this browser');
+      alert('[App] Web Audio API is not supported in this browser');
     }
 	}
 
-function setupAudioNodes(stream) {
-		//video setup naar hier verplaatst
-		videoInput.setAttribute("src",window.URL.createObjectURL(stream));
+	function initVideoAudio(stream){
+		initVideo(stream);
+		if(page === "game"){
+			initAudioContext();
+			initAudio(stream);
+		}
+	}
 
-    // create the media stream from the audio input source (microphone)
+	function initAudio(stream){
     sourceNode = audioContext.createMediaStreamSource(stream);
     audioStream = stream;
 
     analyserNode   = audioContext.createAnalyser();
     javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
-
-    // Create the array for the data values
     amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
 
-    // setup the event handler that is triggered every time enough samples have been collected
-    // trigger the audio analysis and draw one column in the display based on the results
     javascriptNode.onaudioprocess = function () {
 
         amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
         analyserNode.getByteTimeDomainData(amplitudeArray);
-
-        //kijken of er geklapt wordt
         requestAnimFrame(checkForClapping);
     }
 
-    // Now connect the nodes together
-    // Do not connect source node to destination - to avoid feedback
     sourceNode.connect(analyserNode);
     analyserNode.connect(javascriptNode);
     javascriptNode.connect(audioContext.destination);
-  }
+	}
 
   function checkForClapping() {
-  	console.log("hellow");
     var minValue = 9999999;
     var maxValue = 0;
 
@@ -183,13 +262,14 @@ function setupAudioNodes(stream) {
     }
 
     currentValue = (maxValue-minValue)*1000;
-    if (currentValue > 960){
-        //Clapping
-        console.log('PIEW PIEW');
-    }else{
-        //NotClapping
+    if (currentValue > 600){
+        if(xPosSpaceship !== 0){
+        	createLaser();
+        }
     }
   }
+
+	/* HEAD TRACKING */
 
 	function checkHeadPosition(xPos,yPos){
 		if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
@@ -205,10 +285,10 @@ function setupAudioNodes(stream) {
 		var messagep;
 		if (event.status in supportMessages) {
         messagep = document.getElementById('gUMMessage');
-        console.log("supportMessage",supportMessages[event.status]);
+        //console.log("supportMessage",supportMessages[event.status]);
     } else if (event.status in statusMessages) {
         messagep = document.getElementById('headtrackerMessage');
-        console.log("statusMessage",statusMessages[event.status]);
+        //console.log("statusMessage",statusMessages[event.status]);
     }
 	}, true);
 
@@ -229,19 +309,20 @@ function setupAudioNodes(stream) {
 	    	640-640*0.20,
 	    	window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),
 	    	spaceship.offsetWidth/2);
-	    spaceship.style.left = offset+"px";
+	    	spaceship.style.left = offset+"px";
+			xPosSpaceship = offset+spaceship.offsetWidth/2;
 
-	    if(offset > prevXpos + 50){
-	    	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
-	    }else if(offset < prevXpos - 50){
-	    	$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
-	    }else{
-	    	//rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
-	    	//$("#rocket").removeClass("rotateRight");
-	    	//$("#rocket").removeClass("rotateLeft");
-	    }
+	    // if(offset > prevXpos + 50){
+	    // 	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
+	    // }else if(offset < prevXpos - 50){
+	    // 	$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
+	    // }else{
+	    // 	//rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
+	    // 	//$("#rocket").removeClass("rotateRight");
+	    // 	//$("#rocket").removeClass("rotateLeft");
+	    // }
 
-	    prevXpos = offset;
+	    //prevXpos = offset;
 
 		}else if(page === "index"){
     	checkHeadPosition(event.x,event.y);
@@ -252,7 +333,7 @@ function setupAudioNodes(stream) {
 
 })();
 
-},{"./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Webcam":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Webcam.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+},{"./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Webcam":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/video/Webcam.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -284,8 +365,8 @@ function Comet(position){
 	var min_speed = 4;
 	var max_speed = 7;
 
-	var min_radius = 10;
-	var max_radius = 30;
+	var min_radius = 25;
+	var max_radius = 50;
 
 	this.radius = min_radius + Math.round(Math.random()*(max_radius-min_radius));
 	this.speed = min_speed + Math.round(Math.random()*(max_speed-min_speed));
@@ -297,7 +378,56 @@ function Comet(position){
 
 module.exports = Comet;
 
-},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
+var SVGHelper = require("../svg/SVGHelper");
+var Util = require("../util/Util");
+
+function _onFrame(){
+	if(this.move){
+
+		this.position.y = this.position.y - this.speed;
+		if(this.position.y < -this.radius){
+			bean.fire(this,"top");
+		}
+
+		for(var i=0;i<this.comets.length;i++){
+			var distance = Util.distanceBetweenPoints(this.position,this.comets[i].position);
+
+			if(distance < this.comets[i].radius+this.radius){
+				this.hit = this.comets[i];
+				bean.fire(this,"hit");
+			}
+		}
+
+		this.element.setAttribute("cy",this.position.y);
+	}
+	requestAnimationFrame(_onFrame.bind(this));
+}
+
+function _create(){
+	this.element = SVGHelper.createElement("circle");
+	this.element.setAttribute("cx",this.position.x);
+	this.element.setAttribute("cy",this.position.y);
+	this.element.setAttribute("r",this.radius);
+	this.element.setAttribute("fill",this.fill);
+	this.element.setAttribute("class","red");
+}
+
+function Laser(position,comets){
+	this.position = position || {x:0,y:0};
+
+	this.radius = 3;
+	this.speed = 8;
+	this.fill = "red";
+	this.comets = comets;
+
+	_create.call(this);
+	_onFrame.call(this);
+}
+
+module.exports = Laser;
+
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
 var namespace = "http://www.w3.org/2000/svg";
 
 function SVGHelper(){
@@ -310,16 +440,16 @@ SVGHelper.createElement = function(el){
 
 module.exports = SVGHelper;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
 
-Util.randomStartPoint = function(bounds){
+Util.randomStartPointTop = function(bounds){
 	bounds.border = bounds.border || 0;
 	return {
 		x: bounds.border + Math.round(Math.random() * (bounds.width-(bounds.border*2))),
-		y: 0
+		y: -50
 	};
 };
 
@@ -357,7 +487,7 @@ Util.map = function( value, min1, max1, min2, max2 )
 
 module.exports = Util;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Webcam.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/video/Webcam.js":[function(require,module,exports){
 //var Util = require("../util/Util");
 
 function Webcam(element){
