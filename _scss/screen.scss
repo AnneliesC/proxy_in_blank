@@ -599,10 +599,24 @@ header{
 		z-index: -99;
 	}
 
+	.rotateRight{
+			-webkit-transform: rotate(15deg);
+			-ms-transform: rotate(15deg);
+			-moz-transform: rotate(15deg);
+			-o-transform: rotate(15deg);
+	}
+
+	.rotateLeft{
+			-webkit-transform: rotate(-15deg);
+			-ms-transform: rotate(-15deg);
+			-moz-transform: rotate(-15deg);
+			-o-transform: rotate(-15deg);
+	}
+
 	figure{
 			display: block;
 			position: absolute;
-			bottom: -120px;
+			bottom: 0px;
 			left: 47%;
 		img{
 			-webkit-transform: scale(0.6, 0.6);

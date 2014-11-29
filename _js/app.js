@@ -7,6 +7,18 @@
 	var videoInput = document.getElementById("webcamPreview");
 	var canvasInput = document.getElementById("compare");
 
+	// Global Variables for Audio
+  var audioContext;
+  var analyserNode;
+  var javascriptNode;
+  var sampleSize = 1024;  // number of samples to collect before analyzing
+                          // decreasing this gives a faster sonogram, increasing it slows it down
+  var amplitudeArray;     // array to hold frequency data
+  var audioStream;
+
+  //positie van raket bijhouden voor rotatie aan te passen
+	var prevXpos = 630;
+
 	var statusMessages = {
 		"whitebalance": "checking for stability of camera whitebalance",
 		"detecting": "Detecting face",
@@ -47,6 +59,8 @@
 		}
 		console.log("PAGE",page);
 
+		getUserMedia();
+		initAudio();
 		initWebcam();
 		if(page === "game"){
 			initGameSettings();
@@ -84,21 +98,97 @@
 		console.log("[Webcam] video error");
 	}
 
-	function initWebcam(){
-		navigator.getUserMedia  =
-		navigator.getUserMedia ||
-		navigator.webkitGetUserMedia ||
-		navigator.mozGetUserMedia ||
-		navigator.msGetUserMedia;
+	function getUserMedia(){
+		navigator.getUserMedia = ( navigator.getUserMedia ||
+                           navigator.webkitGetUserMedia ||
+                           navigator.mozGetUserMedia ||
+                           navigator.msGetUserMedia);
+	}
 
+	function initWebcam(){
 		if (navigator.getUserMedia) {
-			navigator.getUserMedia({audio: true, video: true}, function(stream) {
-				videoInput.setAttribute("src",window.URL.createObjectURL(stream));
-			},userErrorHandler);
+			navigator.getUserMedia({audio: true, video: true}, setupAudioNodes,userErrorHandler);
 		} else {
 			console.log("[Webcam] fallback");
 		}
 	}
+
+	function initAudio(){
+		console.log("[App] initializing Audio");
+		window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              function(callback, element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+
+		window.AudioContext = (function(){
+        return  window.webkitAudioContext || window.AudioContext || window.mozAudioContext;
+    })();
+
+    try {
+      audioContext = new AudioContext();
+    } catch(e) {
+      alert('Web Audio API is not supported in this browser');
+    }
+	}
+
+function setupAudioNodes(stream) {
+		//video setup naar hier verplaatst
+		videoInput.setAttribute("src",window.URL.createObjectURL(stream));
+
+    // create the media stream from the audio input source (microphone)
+    sourceNode = audioContext.createMediaStreamSource(stream);
+    audioStream = stream;
+
+    analyserNode   = audioContext.createAnalyser();
+    javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
+
+    // Create the array for the data values
+    amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+
+    // setup the event handler that is triggered every time enough samples have been collected
+    // trigger the audio analysis and draw one column in the display based on the results
+    javascriptNode.onaudioprocess = function () {
+
+        amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+        analyserNode.getByteTimeDomainData(amplitudeArray);
+
+        //kijken of er geklapt wordt
+        requestAnimFrame(checkForClapping);
+    }
+
+    // Now connect the nodes together
+    // Do not connect source node to destination - to avoid feedback
+    sourceNode.connect(analyserNode);
+    analyserNode.connect(javascriptNode);
+    javascriptNode.connect(audioContext.destination);
+  }
+
+  function checkForClapping() {
+  	console.log("hellow");
+    var minValue = 9999999;
+    var maxValue = 0;
+
+    for (var i = 0; i < amplitudeArray.length; i++) {
+        var value = amplitudeArray[i] / 256;
+        if(value > maxValue) {
+            maxValue = value;
+        } else if(value < minValue) {
+            minValue = value;
+        }
+    }
+
+    currentValue = (maxValue-minValue)*1000;
+    if (currentValue > 960){
+        //Clapping
+        console.log('PIEW PIEW');
+    }else{
+        //NotClapping
+    }
+  }
 
 	function checkHeadPosition(xPos,yPos){
 		if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
@@ -139,6 +229,19 @@
 	    	window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),
 	    	spaceship.offsetWidth/2);
 	    spaceship.style.left = offset+"px";
+
+	    if(offset > prevXpos + 50){
+	    	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
+	    }else if(offset < prevXpos - 50){
+	    	$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
+	    }else{
+	    	//rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
+	    	//$("#rocket").removeClass("rotateRight");
+	    	//$("#rocket").removeClass("rotateLeft");
+	    }
+
+	    prevXpos = offset;
+
 		}else if(page === "index"){
     	checkHeadPosition(event.x,event.y);
 		}
