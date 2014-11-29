@@ -12,12 +12,11 @@ require("./config/handlebars.js")(app);
 var mongoose = require("./config/mongoose.js")();
 
 //** MODULES **//
-require("./modules/cosmic-race.js")(server);
+require("./modules/cosmicrace.js")(server);
 
 //** ROUTES **//
 require("./controllers/pages.js")(app);
 require("./controllers/api.js")(app, mongoose.models);
-
 
 var port = process.env.PORT;
 

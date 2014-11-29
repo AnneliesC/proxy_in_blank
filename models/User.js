@@ -5,8 +5,11 @@ module.exports = function(mongoose){
 
 	var schema = mongoose.Schema({
 		username: {type: String, required: true, unique: true},
-		score: {type: String, required: true},
-		creation_date: {type: Date, required: true, default: new Date()}
+		password: {type: String, required: true},
+		email: {type: String, required: true, unique: true},
+		active: {type: Boolean, default: true, required: true},
+		creation_date: {type: Date, required: true, default: new Date()},
+		admin: {type: Boolean, default: false, required: true}
 	});
 
 	schema.pre("save", function(next){

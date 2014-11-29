@@ -19,17 +19,29 @@
 			"folder":"public/components"
 		}
 	},
+  "fonts": {
+    "dest": {
+      "folder":"./public/fonts"
+    }
+  },
 	"scripts": {
-		"src":{
-			"folder": "_js",
-			"file":"**/*.js",
-			"entry_file":"app.js"
-		},
-		"dest": {
-			"folder":"public/js",
-			"file":"app.js"
-		}
-	},
+    "src":{
+      "folder": "./_js",
+      "file": "*.js"
+    },
+    "dest": {
+      "folder":"./public/js"
+    }
+  },
+  "vendor": {
+    "src": {
+      "folder": "./bower_components",
+      "file": "**"
+    },
+    "dest": {
+      "file": "vendor.js"
+    }
+  },
 	"shared": {
 		"src":{
 			"folder": "classes",

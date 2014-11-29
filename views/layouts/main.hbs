@@ -1,30 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<script type="text/javascript">
-	  WebFontConfig = {
-	    google: { families: [ 'Roboto::latin' ] }
-	  };
-	  (function() {
-	    var wf = document.createElement('script');
-	    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-	      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-	    wf.type = 'text/javascript';
-	    wf.async = 'true';
-	    var s = document.getElementsByTagName('script')[0];
-	    s.parentNode.insertBefore(wf, s);
-	  })();
-  </script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<link rel="stylesheet" href="/css/screen.css"/>
-	<title>DevineRoulette - {{title}}</title>
+	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico"/>
+	<title>Cosmic Race - {{title}}</title>
 	{{{_sections.header}}}
 </head>
-<body>
-	<div>
-		{{{body}}}
-	</div>
+<body class="{{bodyClass}}">
+	{{{body}}}
 	{{{_sections.scripts}}}
 </body>
 </html>

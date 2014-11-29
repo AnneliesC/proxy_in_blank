@@ -1,5 +1,4 @@
-
-// haalt de users op uit de mongo database
+// api routes
 
 module.exports = function(app, models){
 
@@ -16,4 +15,6 @@ module.exports = function(app, models){
 			res.send(user);
 		});
 	});
+
+
 };

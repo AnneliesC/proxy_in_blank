@@ -13,7 +13,7 @@ module.exports = function(app, express){
 	app.use(body_parser.json());
 	app.use(method_override());
 	app.use(express_session({
-		secret: "secretsomething",
+		secret: "snorrie",
 		saveUninitialized: true,
 		resave: true
 	}));

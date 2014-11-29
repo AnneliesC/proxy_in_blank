@@ -1,5 +1,5 @@
 {
-  "name": "cosmic-race",
+  "name": "cosmicrace",
   "version": "0.0.1",
   "authors": [],
   "license": "MIT",
@@ -12,8 +12,8 @@
   ],
   "dependencies": {
     "jquery": "2",
-    "peerjs": "~0.3.11",
     "underscore": "~1.7.0",
-    "polymer": "~0.4.2"
+    "headtrackr": "*",
+    "bean": "~1.0.14"
   }
 }
