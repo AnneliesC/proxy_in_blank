@@ -148,7 +148,7 @@
 
 	function startGame(){
 		console.log("[App] init game settings");
-		cometsInterval = setInterval(createComet, 4000);
+		cometsInterval = setInterval(createComet, 2000);
 		timerInterval = setInterval(timer, 1000);
 	}
 
