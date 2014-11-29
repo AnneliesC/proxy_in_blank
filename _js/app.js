@@ -2,6 +2,7 @@
 
 	var Util = require("./modules/util/Util");
 	var Webcam = require("./modules/video/Webcam");
+	var Comet = require("./modules/gameElements/Comet");
 
 	var videoInput = document.getElementById("webcamPreview");
 	var canvasInput = document.getElementById("compare");
@@ -30,8 +31,15 @@
 	// enkel op game pagina
 	var spaceship = document.getElementById("rocket");
 	var svg = document.querySelector("svg");
+	var bounds;
 
 	function init(){
+
+		bounds = {
+			width: window.innerWidth,
+			height: window.innerHeight,
+			border: 10
+		};
 
 		page = "index";
 		if(document.querySelector("body").getAttribute("class")){
@@ -52,8 +60,24 @@
 		window.location = "./game";
 	}
 
+	function createComets(){
+
+		(function(){
+		    setTimeout(arguments.callee, 1800);
+
+		    var comet = new Comet(Util.randomStartPoint(bounds));
+		    comet.target = {x:comet.position.x,y:window.innerHeight+comet.radius*2};
+				comet.move = true;
+				bean.on(comet,"done",function(){
+					svg.removeChild(comet.element);
+				});
+				svg.appendChild(comet.element)
+		})();
+	}
+
 	function initGameSettings(){
 		console.log("[App] init game settings");
+		createComets();
 	}
 
 	function userErrorHandler(error){

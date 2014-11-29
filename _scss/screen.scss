@@ -33,34 +33,18 @@ $yellowColor: #e1cc84;
 body{
   font-size:62.5%;
   font-family: quicksand;
-  background: url("../images/bg.jpg");
+  background-color: #21222b;
+  background-image: url("../images/bg1.png"), url("../images/bg2.png");
   color: white;
 }
 
-.gameStarted{
-/*	animation: animatedBg 2s;
-	-webkit-animation: animatedBg 2s;
-
-	animation-timing-function: linear;
-	-webkit-animation-timing-function: linear;
-	-webkit-animation-iteration-count: infinite;*/
+@keyframes animatedBg {
+	from { background-position: 0 0, 0 0; }
+	to { background-position: 0px 602px, 0px 425px; }
 }
 
-@keyframes animatedBg{
-  from {
-	background-position: 0px 0px;
-  }
-  to {
-	background-position: 0px 771px;
-  }
-}
-@-webkit-keyframes animatedBg{
-   from {
-	background-position: 0px 0px;
-  }
-  to {
-	background-position: 0px 771px;
-  }
+.gameStarted	{
+	/*animation: animatedBg 50s linear infinite;*/
 }
 
 video{

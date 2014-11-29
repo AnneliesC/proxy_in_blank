@@ -3,6 +3,7 @@
 
 	var Util = require("./modules/util/Util");
 	var Webcam = require("./modules/video/Webcam");
+	var Comet = require("./modules/gameElements/Comet");
 
 	var videoInput = document.getElementById("webcamPreview");
 	var canvasInput = document.getElementById("compare");
@@ -31,8 +32,15 @@
 	// enkel op game pagina
 	var spaceship = document.getElementById("rocket");
 	var svg = document.querySelector("svg");
+	var bounds;
 
 	function init(){
+
+		bounds = {
+			width: window.innerWidth,
+			height: window.innerHeight,
+			border: 10
+		};
 
 		page = "index";
 		if(document.querySelector("body").getAttribute("class")){
@@ -53,8 +61,24 @@
 		window.location = "./game";
 	}
 
+	function createComets(){
+
+		(function(){
+		    setTimeout(arguments.callee, 1800);
+
+		    var comet = new Comet(Util.randomStartPoint(bounds));
+		    comet.target = {x:comet.position.x,y:window.innerHeight+comet.radius*2};
+				comet.move = true;
+				bean.on(comet,"done",function(){
+					svg.removeChild(comet.element);
+				});
+				svg.appendChild(comet.element)
+		})();
+	}
+
 	function initGameSettings(){
 		console.log("[App] init game settings");
+		createComets();
 	}
 
 	function userErrorHandler(error){
@@ -125,16 +149,74 @@
 
 })();
 
-},{"./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Webcam":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/video/Webcam.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{"./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Webcam":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/video/Webcam.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+var SVGHelper = require("../svg/SVGHelper");
+var Util = require("../util/Util");
+
+function _onFrame(){
+	if(this.move){
+		this.position.y = this.position.y < this.target.y ? Math.min(this.position.y + this.speed, this.target.y) : Math.max(this.position.y + this.speed, this.target.y);
+		var distance = Util.distanceBetweenPoints(this.position,this.target);
+
+		if(distance < 1){
+			bean.fire(this,"done");
+		}
+
+		this.element.setAttribute("cy",this.position.y);
+	}
+	requestAnimationFrame(_onFrame.bind(this));
+}
+
+function _create(){
+	this.element = SVGHelper.createElement("circle");
+	this.element.setAttribute("cx",this.position.x);
+	this.element.setAttribute("cy",this.position.y);
+	this.element.setAttribute("r",this.radius);
+	this.element.setAttribute("fill",this.fill);
+}
+
+function Comet(position){
+	this.position = position || {x:0,y:0};
+
+	var min_speed = 4;
+	var max_speed = 7;
+
+	var min_radius = 10;
+	var max_radius = 30;
+
+	this.radius = min_radius + Math.round(Math.random()*(max_radius-min_radius));
+	this.speed = min_speed + Math.round(Math.random()*(max_speed-min_speed));
+	this.fill = "#9e3c29";
+
+	_create.call(this);
+	_onFrame.call(this);
+}
+
+module.exports = Comet;
+
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+var namespace = "http://www.w3.org/2000/svg";
+
+function SVGHelper(){
+
+}
+
+SVGHelper.createElement = function(el){
+	return document.createElementNS(namespace, el);
+};
+
+module.exports = SVGHelper;
+
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
 
-Util.randomPoint = function(bounds){
+Util.randomStartPoint = function(bounds){
 	bounds.border = bounds.border || 0;
 	return {
 		x: bounds.border + Math.round(Math.random() * (bounds.width-(bounds.border*2))),
-		y: bounds.border + Math.round(Math.random() * (bounds.height-(bounds.border*2)))
+		y: 0
 	};
 };
 

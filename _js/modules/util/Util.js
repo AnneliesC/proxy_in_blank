@@ -2,11 +2,11 @@ function Util(){
 
 }
 
-Util.randomPoint = function(bounds){
+Util.randomStartPoint = function(bounds){
 	bounds.border = bounds.border || 0;
 	return {
 		x: bounds.border + Math.round(Math.random() * (bounds.width-(bounds.border*2))),
-		y: bounds.border + Math.round(Math.random() * (bounds.height-(bounds.border*2)))
+		y: 0
 	};
 };
 

@@ -1,37 +1,15 @@
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
-function Comet(position,type){
-	this.position = position || {x:0,y:0};
-	this.type = type || Comet.STATIC;
-
-	var min_speed = 10;
-	var max_speed = 40;
-
-	this.radius = 7;
-	this.speed = min_speed + Math.round(Math.random()*(max_speed-min_speed));
-	this.effect = Util.randomEffect();
-	this.fill = this.effect.color;
-
-	_create.call(this);
-	_onFrame.call(this);
-}
-
-Comet.STATIC = "static";
-Comet.MOVING = "moving";
-
 function _onFrame(){
-	if(this.move && this.type === Comet.MOVING){
-		this.position.x += (this.target.position.x - this.position.x)/this.speed;
-		this.position.y += (this.target.position.y - this.position.y)/this.speed;
+	if(this.move){
+		this.position.y = this.position.y < this.target.y ? Math.min(this.position.y + this.speed, this.target.y) : Math.max(this.position.y + this.speed, this.target.y);
+		var distance = Util.distanceBetweenPoints(this.position,this.target);
 
-		var distance = Util.distanceBetweenPoints(this.position,this.target.position);
-
-		if(distance < 5){
-			bean.fire(this,"hit");
+		if(distance < 1){
+			bean.fire(this,"done");
 		}
 
-		this.element.setAttribute("cx",this.position.x);
 		this.element.setAttribute("cy",this.position.y);
 	}
 	requestAnimationFrame(_onFrame.bind(this));
@@ -43,6 +21,23 @@ function _create(){
 	this.element.setAttribute("cy",this.position.y);
 	this.element.setAttribute("r",this.radius);
 	this.element.setAttribute("fill",this.fill);
+}
+
+function Comet(position){
+	this.position = position || {x:0,y:0};
+
+	var min_speed = 4;
+	var max_speed = 7;
+
+	var min_radius = 10;
+	var max_radius = 30;
+
+	this.radius = min_radius + Math.round(Math.random()*(max_radius-min_radius));
+	this.speed = min_speed + Math.round(Math.random()*(max_speed-min_speed));
+	this.fill = "#9e3c29";
+
+	_create.call(this);
+	_onFrame.call(this);
 }
 
 module.exports = Comet;
