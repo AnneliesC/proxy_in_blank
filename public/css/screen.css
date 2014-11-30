@@ -55,14 +55,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 
 @font-face {
-  font-family: "quicksand";
+  font-family: 'quicksand';
   src: url("../fonts/quicksand/quicksand-bold-webfont.eot");
   src: url("../fonts/quicksand/quicksand-bold-webfont.eot#?iefix") format("embedded-opentype"), url("../fonts/quicksand/quicksand-bold-webfont.woff") format("woff"), url("../fonts/quicksand/quicksand-bold-webfont.ttf") format("truetype"), url("../fonts/quicksand/quicksand-bold-webfont.svg#Ubuntu-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "reckless";
+  font-family: 'reckless';
   src: url("../fonts/reckless/reckless-webfont.eot");
   src: url("../fonts/reckless/reckless-webfont.eot#?iefix") format("embedded-opentype"), url("../fonts/reckless/reckless-webfont.woff") format("woff"), url("../fonts/reckless/reckless-webfont.ttf") format("truetype"), url("../fonts/reckless/reckless-webfont.svg#Ubuntu-Regular") format("svg");
   font-weight: normal;
@@ -73,7 +73,7 @@ body {
   font-family: quicksand;
   background-color: #21222b;
   background-image: url("../images/bg1.png"), url("../images/bg2.png");
-  color: white;
+  color: #fff;
 }
 
 @-webkit-keyframes animatedBg {
@@ -81,7 +81,7 @@ body {
     background-position: 0 0, 0 0;
   }
   to {
-    background-position: 0px 602px, 0px 425px;
+    background-position: 0 602px, 0 425px;
   }
 }
 
@@ -90,16 +90,16 @@ body {
     background-position: 0 0, 0 0;
   }
   to {
-    background-position: 0px 602px, 0px 425px;
+    background-position: 0 602px, 0 425px;
   }
 }
-.gameStarted {
+.gamestarted {
   -webkit-animation: animatedBg 50s linear infinite;
   animation: animatedBg 50s linear infinite;
 }
 
 video {
-  margin: 10px auto 0 auto;
+  margin: 10px auto 0;
   -webkit-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
   transform: scaleX(-1);
@@ -108,47 +108,19 @@ video {
 header {
   width: 100%;
 }
-header #title, header .gameTitle {
-  width: 411px;
-}
-header #title h1, header .gameTitle h1 {
-  color: #3a679a;
-  font-family: reckless;
-  font-size: 9em;
-  text-align: center;
-  -webkit-transform: rotate(-10deg);
-  -ms-transform: rotate(-10deg);
-  -moz-transform: rotate(-10deg);
-  -o-transform: rotate(-10deg);
-  margin-top: 40px;
-}
-header #title #titleWhite, header .gameTitle #titleWhite {
-  position: absolute;
-  top: -43px;
-  left: -3px;
-  color: white;
-}
-header #title .star, header .gameTitle .star {
-  background: url("../images/shooting_star.png") no-repeat;
-  width: 184px;
-  height: 47px;
-  position: absolute;
-  bottom: -30px;
-  left: 125px;
-}
 header #title {
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
+  margin: 60px auto 0;
+  background: url("../images/title.png") no-repeat;
+  width: 374px;
+  height: 114px;
 }
-header #title #titleWhite {
-  top: -43px;
-  left: -3px;
+header #title h1 {
+  visibility: hidden;
 }
 header h2 span {
   display: none;
 }
-header .gameTitle {
+header .gametitle {
   -webkit-transform: scale(0.4, 0.4);
   -ms-transform: scale(0.4, 0.4);
   -moz-transform: scale(0.4, 0.4);
@@ -162,21 +134,17 @@ header .gameTitle {
   -o-animation: slide .7s;
   -ms-animation: slide .7s;
   position: absolute;
-  top: -10px;
+  top: -50px;
   left: -70px;
-}
-header .gameTitle #titleWhite {
-  top: -3px;
-  left: -3px;
 }
 
 @keyframes slide {
   from {
-    top: 100px;
+    top: 10px;
     left: 514px;
   }
   to {
-    top: -10px;
+    top: -50px;
     left: -70px;
     -webkit-transform: scale(0.4, 0.4);
     -ms-transform: scale(0.4, 0.4);
@@ -186,7 +154,7 @@ header .gameTitle #titleWhite {
 }
 @-webkit-keyframes slide {
   from {
-    top: 100px;
+    top: 10px;
     left: 514px;
     -webkit-transform: scale(1, 1);
     -ms-transform: scale(1, 1);
@@ -194,7 +162,7 @@ header .gameTitle #titleWhite {
     -o-transform: scale(1, 1);
   }
   to {
-    top: -10px;
+    top: -50px;
     left: -70px;
     -webkit-transform: scale(0.4, 0.4);
     -ms-transform: scale(0.4, 0.4);
@@ -204,36 +172,31 @@ header .gameTitle #titleWhite {
 }
 #start {
   width: 1100px;
-  margin: 120px auto 0px auto;
+  margin: 120px auto 0;
 }
-#start #infoList {
+
+#infolist {
   width: 260px;
   margin-left: 100px;
   position: relative;
 }
-#start #infoList ul li {
+#infolist ul li {
   font-size: 1.9em;
 }
-#start #infoList ul li span {
+#infolist ul span {
   width: 29px;
   height: 28px;
   display: block;
 }
-#start #infoList ul li #list_1 {
-  background: url("../images/1.png") no-repeat;
-}
-#start #infoList ul li #list_2 {
-  background: url("../images/2.png") no-repeat;
-}
-#start #infoList .left li {
+#infolist .left li {
   margin-bottom: 120px;
 }
-#start #infoList .right li {
+#infolist .right li {
   margin-top: 2px;
   margin-bottom: 100px;
   line-height: 130%;
 }
-#start #infoList .dot1 {
+#infolist .dot1 {
   background: url("../images/bg_dotted.png") no-repeat;
   width: 98px;
   height: 121px;
@@ -241,7 +204,7 @@ header .gameTitle #titleWhite {
   top: 25px;
   left: 13px;
 }
-#start #infoList .dot2 {
+#infolist .dot2 {
   background: url("../images/bg_dotted1.png") no-repeat;
   width: 76px;
   height: 102px;
@@ -249,7 +212,7 @@ header .gameTitle #titleWhite {
   top: 175px;
   left: -35px;
 }
-#start #infoList #btnStart {
+#infolist #btnstart {
   width: 210px;
   display: block;
   background-color: #b2432e;
@@ -267,21 +230,30 @@ header .gameTitle #titleWhite {
   pointer-events: default;
   cursor: pointer;
 }
-#start #infoList #btnStart:hover {
+#infolist #btnstart:hover {
   box-shadow: none;
   bottom: 7px;
   right: -13px;
 }
-#start #infoList .disabled {
-  opacity: 0.6 !important;
+#infolist .disabled {
+  opacity: .6 !important;
   pointer-events: none;
   cursor: default;
 }
-#start #rockets {
+
+#list_1 {
+  background: url("../images/1.png") no-repeat;
+}
+
+#list_2 {
+  background: url("../images/2.png") no-repeat;
+}
+
+#rockets {
   width: 500px;
   margin-top: 6px;
 }
-#start #rockets .webcam {
+#rockets .webcam {
   position: relative;
   background-color: #292f3e;
   width: 370px;
@@ -289,13 +261,13 @@ header .gameTitle #titleWhite {
   border-radius: 10px;
   text-align: center;
 }
-#start #rockets .webcam video {
-  margin: 10px auto 0 auto;
+#rockets .webcam video {
+  margin: 10px auto 0;
   -webkit-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
   transform: scaleX(-1);
 }
-#start #rockets .webcam figure {
+#rockets .webcam figure {
   top: 0;
   left: 0;
   right: 0;
@@ -304,7 +276,7 @@ header .gameTitle #titleWhite {
   height: 100%;
   position: absolute;
 }
-#start #rockets .webcam img[alt="rocket"] {
+#rockets .webcam img[alt='rocket'] {
   display: block;
   position: absolute;
   top: -120px;
@@ -313,29 +285,30 @@ header .gameTitle #titleWhite {
   -ms-transform: scale(0.55, 0.55) rotate(-30deg);
   transform: scale(0.55, 0.55) rotate(-30deg);
 }
-#start #rockets .webcam img[alt="helmet"] {
+#rockets .webcam img[alt='helmet'] {
   display: block;
-  margin: -17px auto 0 auto;
+  margin: -17px auto 0;
   -webkit-transform: scale(0.85, 0.85);
   -ms-transform: scale(0.85, 0.85);
   transform: scale(0.85, 0.85);
 }
-#start #rockets .webcam span {
+#rockets .webcam span {
   display: block;
   width: 8px;
   height: 8px;
-  margin: 40px auto 0 auto;
+  margin: 40px auto 0;
   border-radius: 50%;
 }
-#start #rockets .webcam .green {
+#rockets .webcam .green {
   background-color: #46c846;
-  box-shadow: 0px 0px 8px 5px rgba(70, 200, 70, 0.7);
+  box-shadow: 0 0 8px 5px rgba(70, 200, 70, 0.7);
 }
-#start #rockets .webcam .red {
-  background-color: red;
-  box-shadow: 0px 0px 8px 5px rgba(255, 0, 0, 0.7);
+#rockets .webcam .red {
+  background-color: #fff000;
+  box-shadow: 0 0 8px 5px rgba(255, 0, 0, 0.7);
 }
-#start #rockets .tutorial {
+
+.tutorial {
   background-color: #3a679a;
   width: 380px;
   height: 42px;
@@ -343,44 +316,48 @@ header .gameTitle #titleWhite {
   margin-right: 100px;
   border-radius: 10px;
 }
-#start #rockets .tutorial #tutText {
+.tutorial #tuttext {
   width: 320px;
   margin-left: auto;
   margin-right: auto;
   padding-top: 5px;
   position: relative;
 }
-#start #rockets .tutorial #tutText .left, #start #rockets .tutorial #tutText .right {
+.tutorial #tuttext .left,
+.tutorial #tuttext .right {
   width: 155px;
   font-size: 1.2em;
   line-height: 130%;
   text-align: center;
 }
-#start #rockets .tutorial #tutText .lines, #start #rockets .tutorial #tutText .iphone, #start #rockets .tutorial #tutText .target, #start #rockets .tutorial #tutText .question {
+.tutorial #tuttext .lines,
+.tutorial #tuttext .iphone,
+.tutorial #tuttext .target,
+.tutorial #tuttext .question {
   position: absolute;
 }
-#start #rockets .tutorial #tutText .lines {
+.tutorial #tuttext .lines {
   background: url("../images/bg_lines.png") no-repeat;
   top: -17px;
   left: -48px;
   width: 404px;
   height: 68px;
 }
-#start #rockets .tutorial #tutText .iphone {
+.tutorial #tuttext .iphone {
   background: url("../images/iphone.png") no-repeat;
   top: -53px;
   left: 23px;
   width: 81px;
   height: 43px;
 }
-#start #rockets .tutorial #tutText .target {
+.tutorial #tuttext .target {
   background: url("../images/target.png") no-repeat;
   top: -63px;
   right: 56px;
   width: 43px;
   height: 54px;
 }
-#start #rockets .tutorial #tutText .question {
+.tutorial #tuttext .question {
   background: url("../images/question.png") no-repeat;
   top: -14px;
   left: -59px;
@@ -436,8 +413,8 @@ header .gameTitle #titleWhite {
   height: 180px;
   border-radius: 0 0 0 10px;
   position: absolute;
-  right: 0px;
-  top: 0px;
+  right: 0;
+  top: 0;
 }
 #game .webcam div {
   position: relative;
@@ -472,120 +449,47 @@ header .gameTitle #titleWhite {
   -o-animation: slideDown .8s;
   -ms-animation: slideDown .8s;
 }
-#game #scoreboard .scoreInfo {
-  margin-left: auto;
-  margin-right: auto;
-  background: url("../images/bg_score.png") no-repeat;
-  width: 343px;
-  height: 56px;
-}
-#game #scoreboard .scoreInfo p {
-  text-align: center;
-  font-size: 1.3em;
-  color: #292f3e;
-  font-family: Arial-black;
-  font-weight: bold;
-}
-#game #scoreboard .scoreInfo p span {
-  font-size: 1.8em;
-  color: white;
-  font-family: quicksand;
-}
-#game #scoreboard .scoreInfo #score, #game #scoreboard .scoreInfo #time {
-  padding-top: 7px;
-}
-#game #scoreboard .scoreInfo #score {
-  margin-left: 55px;
-}
-#game #scoreboard .scoreInfo #time {
-  margin-right: 45px;
-}
-#game #scoreboard #btnBack, #game #scoreboard #btnInfo {
+#game #btnback,
+#game #btninfo {
   width: 32px;
   height: 33px;
   display: block;
   position: absolute;
   top: 10px;
 }
-#game #scoreboard #btnBack span, #game #scoreboard #btnInfo span {
+#game #btnback span,
+#game #btninfo span {
   visibility: hidden;
 }
-#game #scoreboard #btnBack:hover, #game #scoreboard #btnInfo:hover {
+#game #btnback:hover,
+#game #btninfo:hover {
   animation-timing-function: ease-in;
   -moz-animation-timing-function: ease-in;
   -webkit-animation-timing-function: ease-in;
 }
-#game #scoreboard #btnBack {
+#game #btnback {
   background: url("../images/btn_back.png") no-repeat;
   left: -2px;
 }
-#game #scoreboard #btnBack:hover {
-  animation: darkerBack 0.3s;
-  -moz-animation: darkerBack 0.3s;
-  -webkit-animation: darkerBack 0.3s;
-  -o-animation: darkerBack 0.3s;
-  -ms-animation: darkerBack 0.3s;
+#game #btnback:hover {
+  animation: darkerBack .3s;
+  -moz-animation: darkerBack .3s;
+  -webkit-animation: darkerBack .3s;
+  -o-animation: darkerBack .3s;
+  -ms-animation: darkerBack .3s;
   background: url("../images/btn_back_hover.png") no-repeat;
 }
-#game #scoreboard #btnInfo {
+#game #btninfo {
   background: url("../images/btn_info.png") no-repeat;
-  right: 0px;
+  right: 0;
 }
-#game #scoreboard #btnInfo:hover {
-  animation: darkerInfo 0.3s;
-  -moz-animation: darkerInfo 0.3s;
-  -webkit-animation: darkerInfo 0.3s;
-  -o-animation: darkerInfo 0.3s;
-  -ms-animation: darkerInfo 0.3s;
+#game #btninfo:hover {
+  animation: darkerInfo .3s;
+  -moz-animation: darkerInfo .3s;
+  -webkit-animation: darkerInfo .3s;
+  -o-animation: darkerInfo .3s;
+  -ms-animation: darkerInfo .3s;
   background: url("../images/btn_info_hover.png") no-repeat;
-}
-#game .comet1 {
-  background: url("../images/com1.png") no-repeat;
-  width: 93px;
-  height: 95px;
-  position: absolute;
-  top: 150px;
-  left: 480px;
-}
-#game .comet2 {
-  background: url("../images/com2.png") no-repeat;
-  width: 197px;
-  height: 95px;
-  position: absolute;
-  top: 400px;
-  right: 250px;
-}
-#game .comet3 {
-  background: url("../images/com3.png") no-repeat;
-  width: 87px;
-  height: 85px;
-  position: absolute;
-  bottom: 200px;
-  left: 300px;
-}
-#game .comet4 {
-  background: url("../images/com4.png") no-repeat;
-  width: 87px;
-  height: 79px;
-  position: absolute;
-  top: 700px;
-  right: 250px;
-}
-#game .comet5 {
-  background: url("../images/com5.png") no-repeat;
-  width: 49px;
-  height: 46px;
-  position: absolute;
-  bottom: 400px;
-  left: 200px;
-}
-#game .comet6 {
-  background: url("../images/com6.png") no-repeat;
-  width: 39px;
-  height: 39px;
-  position: absolute;
-  top: 200px;
-  right: 250px;
 }
 #game svg {
   position: absolute;
@@ -595,13 +499,13 @@ header .gameTitle #titleWhite {
   bottom: 0;
   z-index: -99;
 }
-#game .rotateRight {
+#game .rotateright {
   -webkit-transform: rotate(15deg);
   -ms-transform: rotate(15deg);
   -moz-transform: rotate(15deg);
   -o-transform: rotate(15deg);
 }
-#game .rotateLeft {
+#game .rotateleft {
   -webkit-transform: rotate(-15deg);
   -ms-transform: rotate(-15deg);
   -moz-transform: rotate(-15deg);
@@ -628,7 +532,7 @@ header .gameTitle #titleWhite {
   height: 530px;
   z-index: 1;
   border-radius: 10px;
-  border: 1px dashed white;
+  border: 1px dashed #fff;
 }
 #game .stats #highscore {
   background: url("../images/title_scores.png") no-repeat;
@@ -638,109 +542,9 @@ header .gameTitle #titleWhite {
   top: -25px;
   left: 145px;
 }
-#game .stats ol {
-  list-style-type: none;
-  list-style-type: decimal;
-  margin-top: 55px;
-  margin-left: 108px;
-  width: 400px;
-  counter-reset: li-counter;
-}
-#game .stats ol li {
-  position: relative;
-  margin-bottom: 0px;
-  padding-left: 25px;
-  min-height: 3em;
-  padding-top: 8px;
-  font-size: 1.8em;
-}
-#game .stats ol li span {
-  color: #e1cc84;
-  float: right;
-}
-#game .stats ol .place {
-  color: #e1cc84;
-}
-#game .stats ol li:before {
-  position: absolute;
-  top: 0;
-  left: -1.33em;
-  width: 1.5em;
-  height: 1.3em;
-  padding-top: 5px;
-  font-size: 1.2em;
-  text-align: center;
-  color: #b2432e;
-  border-radius: 50%;
-  background-color: white;
-  content: counter(li-counter);
-  counter-increment: li-counter;
-  box-shadow: 2px 2px #292f3e;
-}
-#game .stats .feedback {
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  border-top: white 1px dashed;
-}
-#game .stats .feedback h4 {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 2.1em;
-}
-#game .stats .feedback h4 span {
-  border-bottom: 3px solid #e1cc84;
-  border-radius: 2px;
-}
-#game .stats .feedback #form {
-  width: 500px;
-  margin-top: 15px;
-  font-size: 1.4em;
-}
-#game .stats .feedback #form p {
-  color: #e1cc84;
-  margin-left: 10px;
-}
-#game .stats .feedback #form label {
-  visibility: hidden;
-}
-#game .stats .feedback #form input[type="text"] {
-  border-radius: 10px;
-  border: none;
-  width: 318px;
-  font-family: quicksand;
-  font-size: 1.4em;
-  padding: 5px;
-  text-align: center;
-}
-#game .stats .feedback #form input[type="checkbox"] {
-  margin-right: 5px;
-  margin-top: 15px;
-}
-#game .stats .feedback #form input[type="submit"] {
+#game .stats #btnagain {
   background-color: #b2432e;
-  width: 120px;
-  height: 30px;
-  border: none;
-  cursor: pointer;
-  margin-top: 30px;
-  margin-right: 10px;
-  color: #e1cc84;
-  font-size: 1em;
-  padding-right: 5px;
-  padding-bottom: 4px;
-  text-align: center;
-  text-transform: uppercase;
-  box-shadow: 3px 3px #e1cc84;
-}
-#game .stats .feedback #form input[type="submit"]:hover {
-  box-shadow: 0px 0px;
-  margin-top: 33px;
-  margin-right: 8px;
-}
-#game .stats .feedback #btnAgain {
-  background-color: #b2432e;
-  margin: 0px auto 0px auto;
+  margin: 0 auto;
   display: block;
   text-align: center;
   color: #e1cc84;
@@ -753,10 +557,142 @@ header .gameTitle #titleWhite {
   margin-top: 18px;
   box-shadow: 3px 3px #e1cc84;
 }
-#game .stats .feedback #btnAgain:hover {
-  box-shadow: 0px 0px;
+#game .stats #btnagain:hover {
+  box-shadow: 0 0;
   margin-top: 21px;
   margin-left: 125px;
+}
+
+.scoreinfo {
+  margin-left: auto;
+  margin-right: auto;
+  background: url("../images/bg_score.png") no-repeat;
+  width: 343px;
+  height: 56px;
+}
+.scoreinfo p {
+  text-align: center;
+  font-size: 1.3em;
+  color: #292f3e;
+  font-family: Arial-black;
+  font-weight: bold;
+}
+.scoreinfo p span {
+  font-size: 1.8em;
+  color: #fff;
+  font-family: quicksand;
+}
+.scoreinfo #score,
+.scoreinfo #time {
+  padding-top: 7px;
+}
+.scoreinfo #score {
+  margin-left: 55px;
+}
+.scoreinfo #time {
+  margin-right: 45px;
+}
+
+ol {
+  list-style-type: decimal;
+  margin-top: 55px;
+  margin-left: 108px;
+  width: 400px;
+  counter-reset: li-counter;
+}
+ol li {
+  position: relative;
+  margin-bottom: 0;
+  padding-left: 25px;
+  min-height: 3em;
+  padding-top: 8px;
+  font-size: 1.8em;
+}
+ol li span {
+  color: #e1cc84;
+  float: right;
+}
+ol .place {
+  color: #e1cc84;
+}
+ol li:before {
+  position: absolute;
+  top: 0;
+  left: -1.33em;
+  width: 1.5em;
+  height: 1.3em;
+  padding-top: 5px;
+  font-size: 1.2em;
+  text-align: center;
+  color: #b2432e;
+  border-radius: 50%;
+  background-color: #fff;
+  content: counter(li-counter);
+  counter-increment: li-counter;
+  box-shadow: 2px 2px #292f3e;
+}
+
+.feedback {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: #fff 1px dashed;
+}
+.feedback h4 {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 2.1em;
+}
+.feedback h4 span {
+  border-bottom: 3px solid #e1cc84;
+  border-radius: 2px;
+}
+
+#form {
+  width: 500px;
+  margin-top: 15px;
+  font-size: 1.4em;
+}
+#form p {
+  color: #e1cc84;
+  margin-left: 10px;
+}
+#form label {
+  visibility: hidden;
+}
+#form input[type='text'] {
+  border-radius: 10px;
+  border: 0;
+  width: 318px;
+  font-family: quicksand;
+  font-size: 1.4em;
+  padding: 5px;
+  text-align: center;
+}
+#form input[type='checkbox'] {
+  margin-right: 5px;
+  margin-top: 15px;
+}
+#form input[type='submit'] {
+  background-color: #b2432e;
+  width: 120px;
+  height: 30px;
+  border: 0;
+  cursor: pointer;
+  margin-top: 30px;
+  margin-right: 10px;
+  color: #e1cc84;
+  font-size: 1em;
+  padding-right: 5px;
+  padding-bottom: 4px;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 3px 3px #e1cc84;
+}
+#form input[type='submit']:hover {
+  box-shadow: 0 0;
+  margin-top: 33px;
+  margin-right: 8px;
 }
 
 @keyframes slideDown {
@@ -764,7 +700,7 @@ header .gameTitle #titleWhite {
     margin-top: -100px;
   }
   to {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 @-webkit-keyframes slideDown {
@@ -772,7 +708,7 @@ header .gameTitle #titleWhite {
     margin-top: -100px;
   }
   to {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 @keyframes darkerBack {
@@ -815,47 +751,19 @@ header .gameTitle #titleWhite {
   float: right;
 }
 
-@media screen and (max-width: 400px) {
-  .bgIphone {
-    width: 100vw;
-    height: 100vh;
-    background-color: #c4b270;
-    margin: 0px;
-    border-left: solid 10px #ab9b5f;
-    border-right: solid 10px #d6c384;
-  }
-  .bgIphone .circle {
-    width: 310px;
-    height: 310px;
-    border-radius: 100px;
-    background-color: #601785;
-  }
-  .bgIphone .phoneTitle {
-    padding-top: 20px;
-  }
-  .bgIphone .phoneTitle h1 {
-    background: url("../images/title_iphone.png") no-repeat;
-    width: 221px;
-    height: 67px;
-    margin: 0px auto 0px auto;
-  }
-  .bgIphone .phoneTitle h1 span {
-    visibility: hidden;
-  }
-}
-/* CLAP TEST */
 #canvas {
   margin-left: auto;
   margin-right: auto;
   display: block;
-  background-color: black;
+  background-color: #000;
 }
 
 #controls {
   text-align: center;
 }
 
-#start_button, #stop_button {
+#start_button,
+#stop_button {
   font-size: 16pt;
 }
 

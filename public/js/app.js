@@ -28,7 +28,7 @@
 
 	// enkel op index pagina
 	var light = document.getElementById("light");
-	var btnStart = document.getElementById("btnStart");
+	var btnstart = document.getElementById("btnstart");
 
 	// enkel op game pagina
 	var spaceship = document.getElementById("rocket");
@@ -71,11 +71,11 @@
 			resetGameSettings();
 			btnInfo.addEventListener("click", btnInfoClickHandler);
 		}else if(page === "index"){
-			btnStart.addEventListener("click", btnStartClickHandler);
+			btnstart.addEventListener("click", btnstartClickHandler);
 		}
 	}
 
-	function btnStartClickHandler(event){
+	function btnstartClickHandler(event){
 		event.preventDefault();
 		window.location = "./game";
 	}
@@ -274,10 +274,10 @@
 	function checkHeadPosition(xPos,yPos){
 		if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
     	light.setAttribute("class","green");
-    	btnStart.setAttribute("class","");
+    	btnstart.setAttribute("class","");
 		}else if((xPos < 280 || xPos > 380) && light.getAttribute("class") === "green"){
     	light.setAttribute("class","red");
-    	btnStart.setAttribute("class","disabled");
+    	btnstart.setAttribute("class","disabled");
 		}
 	}
 
