@@ -623,7 +623,7 @@ header{
 	figure{
 			display: block;
 			position: absolute;
-			bottom: -120px;
+			bottom: -30px;
 			left: 47%;
 		img{
 			-webkit-transform: scale(0.6, 0.6);
@@ -639,7 +639,7 @@ header{
 		left: 420px;
 		background-color: $blueColor;
 		width: 600px;
-		height: 500px;
+		height: 530px;
 		z-index: 1;
 		border-radius: 10px;
 		border: 1px dashed white;
@@ -710,41 +710,55 @@ header{
 				}
 			}
 			#form{
-				width: 320px;
-				margin: 15px auto 0px auto;
+				width: 500px;
+				margin-top: 15px;
+				font-size: 1.4em;
+				p{
+					color: $yellowColor;
+					margin-left: 10px;
+				}
 				label{
 					visibility: hidden;
 				}
 				input[type="text"]{
 					border-radius: 10px;
 					border: none;
-					width: 253px;
+					width: 318px;
 					font-family: quicksand;
-					font-size: 1.8em;
+					font-size: 1.4em;
 					padding: 5px;
 					text-align: center;
 				}
+				input[type="checkbox"]{
+					margin-right: 5px;
+					margin-top: 15px;
+				}
 				input[type="submit"]{
-					background: url("../images/btn_send.png")no-repeat;
-					width: 37px;
-					height: 31px;
-				    border: none;
+					background-color: $orangeColor;
+					width: 120px;
+					height: 30px;
+			    border: none;
+			    cursor: pointer;
+			    margin-top: 30px;
+			    margin-right: 10px;
+			    color: $yellowColor;
+			    font-size: 1em;
+			    padding-right: 5px;
+			    padding-bottom: 4px;
+					text-align: center;
+					text-transform: uppercase;
 
-				    cursor: pointer;
-				    margin-top: 10px;
-				    margin-right: 10px;
+			    -moz-box-shadow: 3px 3px $yellowColor;
+			    -webkit-box-shadow: 3px 3px $yellowColor;
+			    box-shadow: 3px 3px $yellowColor;
+			    &:hover{
+				    -moz-box-shadow: 0px 0px;
+				    -webkit-box-shadow: 0px 0px ;
+				    box-shadow: 0px 0px;
 
-				    -moz-box-shadow: 3px 3px $yellowColor;
-				    -webkit-box-shadow: 3px 3px $yellowColor;
-				    box-shadow: 3px 3px $yellowColor;
-				    &:hover{
-					    -moz-box-shadow: 0px 0px;
-					    -webkit-box-shadow: 0px 0px ;
-					    box-shadow: 0px 0px;
-
-					    margin-top: 14px;
-					    margin-right: 8px;
-				    }
+			    	margin-top: 33px;
+				    margin-right: 8px;
+			    }
 				}
 			}
 

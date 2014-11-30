@@ -50,7 +50,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
@@ -61,7 +61,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: "reckless";
   src: url("../fonts/reckless/reckless-webfont.eot");
@@ -69,7 +68,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-weight: normal;
   font-style: normal;
 }
-
 body {
   font-size: 62.5%;
   font-family: quicksand;
@@ -82,7 +80,6 @@ body {
   from {
     background-position: 0 0, 0 0;
   }
-
   to {
     background-position: 0px 602px, 0px 425px;
   }
@@ -92,12 +89,10 @@ body {
   from {
     background-position: 0 0, 0 0;
   }
-
   to {
     background-position: 0px 602px, 0px 425px;
   }
 }
-
 .gameStarted {
   -webkit-animation: animatedBg 50s linear infinite;
   animation: animatedBg 50s linear infinite;
@@ -180,7 +175,6 @@ header .gameTitle #titleWhite {
     top: 100px;
     left: 514px;
   }
-
   to {
     top: -10px;
     left: -70px;
@@ -190,7 +184,6 @@ header .gameTitle #titleWhite {
     -o-transform: scale(0.4, 0.4);
   }
 }
-
 @-webkit-keyframes slide {
   from {
     top: 100px;
@@ -200,7 +193,6 @@ header .gameTitle #titleWhite {
     -moz-transform: scale(1, 1);
     -o-transform: scale(1, 1);
   }
-
   to {
     top: -10px;
     left: -70px;
@@ -210,7 +202,6 @@ header .gameTitle #titleWhite {
     -o-transform: scale(0.4, 0.4);
   }
 }
-
 #start {
   width: 1100px;
   margin: 120px auto 0px auto;
@@ -401,42 +392,34 @@ header .gameTitle #titleWhite {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerLeft {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
-
 @keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
-
 #game {
   width: 100%;
   height: 100%;
@@ -627,7 +610,7 @@ header .gameTitle #titleWhite {
 #game figure {
   display: block;
   position: absolute;
-  bottom: -120px;
+  bottom: -30px;
   left: 47%;
 }
 #game figure img {
@@ -642,7 +625,7 @@ header .gameTitle #titleWhite {
   left: 420px;
   background-color: #3a679a;
   width: 600px;
-  height: 500px;
+  height: 530px;
   z-index: 1;
   border-radius: 10px;
   border: 1px dashed white;
@@ -710,8 +693,13 @@ header .gameTitle #titleWhite {
   border-radius: 2px;
 }
 #game .stats .feedback #form {
-  width: 320px;
-  margin: 15px auto 0px auto;
+  width: 500px;
+  margin-top: 15px;
+  font-size: 1.4em;
+}
+#game .stats .feedback #form p {
+  color: #e1cc84;
+  margin-left: 10px;
 }
 #game .stats .feedback #form label {
   visibility: hidden;
@@ -719,25 +707,35 @@ header .gameTitle #titleWhite {
 #game .stats .feedback #form input[type="text"] {
   border-radius: 10px;
   border: none;
-  width: 253px;
+  width: 318px;
   font-family: quicksand;
-  font-size: 1.8em;
+  font-size: 1.4em;
   padding: 5px;
   text-align: center;
 }
+#game .stats .feedback #form input[type="checkbox"] {
+  margin-right: 5px;
+  margin-top: 15px;
+}
 #game .stats .feedback #form input[type="submit"] {
-  background: url("../images/btn_send.png") no-repeat;
-  width: 37px;
-  height: 31px;
+  background-color: #b2432e;
+  width: 120px;
+  height: 30px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-right: 10px;
+  color: #e1cc84;
+  font-size: 1em;
+  padding-right: 5px;
+  padding-bottom: 4px;
+  text-align: center;
+  text-transform: uppercase;
   box-shadow: 3px 3px #e1cc84;
 }
 #game .stats .feedback #form input[type="submit"]:hover {
   box-shadow: 0px 0px;
-  margin-top: 14px;
+  margin-top: 33px;
   margin-right: 8px;
 }
 #game .stats .feedback #btnAgain {
@@ -765,62 +763,50 @@ header .gameTitle #titleWhite {
   from {
     margin-top: -100px;
   }
-
   to {
     margin-top: 0px;
   }
 }
-
 @-webkit-keyframes slideDown {
   from {
     margin-top: -100px;
   }
-
   to {
     margin-top: 0px;
   }
 }
-
 @keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
-
 @keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
-
 .left {
   float: left;
 }

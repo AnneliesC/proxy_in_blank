@@ -311,17 +311,17 @@
 	    	spaceship.style.left = offset+"px";
 			xPosSpaceship = offset+spaceship.offsetWidth/2;
 
-	    // if(offset > prevXpos + 50){
-	    // 	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
-	    // }else if(offset < prevXpos - 50){
-	    // 	$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
-	    // }else{
-	    // 	//rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
-	    // 	//$("#rocket").removeClass("rotateRight");
-	    // 	//$("#rocket").removeClass("rotateLeft");
-	    // }
+	   		if(offset > prevXpos + 50){
+	    	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
+	    	}else if(offset < prevXpos - 50){
+	    		$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
+	    	}else{
+		    	rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
+		    	$("#rocket").removeClass("rotateRight");
+		    	$("#rocket").removeClass("rotateLeft");
+	    }
 
-	    //prevXpos = offset;
+	    prevXpos = offset;
 
 		}else if(page === "index"){
     	checkHeadPosition(event.x,event.y);

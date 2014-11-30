@@ -1,0 +1,66 @@
+{{#section "header"}}
+{{/section}}
+
+<header>
+	<div class="gameTitle">
+		<h1>Cosmic Race</h1>
+		<h1 id="titleWhite">Cosmic Race</h1>
+		<div class="star">&nbsp;</div>
+	</div>
+</header>
+
+<article id="game">
+	<header><h2><span>The game</span></h2></header>
+
+
+
+
+	<section class="stats">
+		<header><h2 id="highscore"><span>Highscore</span></h2></header>
+		<ol>
+			<li>Annelies Clauwaert<span>102939 punten</span></li>
+			<li>Zo&euml; Van kuyk<span>102938 punten</span></li>
+			<li class="place">jouw naam<span>102937 punten</span></li>
+			<li>Maarten Verleye<span>102936 punten</span></li>
+			<li>Trudy Vogels<span>102935 punten</span></li>
+		</ol>
+		<section class="feedback">
+			<!-- ALS JE DE TOP 5 HAALT -->
+			<header><h4>Je haalde de top 5 met <span>102936</span> punten!</h4></header>
+			<form method="post" action="start.html" id="form">
+				<div class="left">
+					<label for="txtName">naam</label><br/>
+					<input type="text"  id="txtName" name="txtName" value="" placeholder="Vul je naam in"/><br/>
+					<input type="checkbox" name="option3" value="Cheese">Laat mij weten als mijn record verbroken is!<br>
+				</div>
+				<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
+			</form>
+
+			<!-- ALS JE DE TOP 5 NIET HAALT -->
+			<!--<header><h4>Je scoorde <span>102936</span> punten!</h4></header>
+			<a href="start.html" id="btnAgain"><span>speel nog eens!</span></a>-->
+		</section>
+	</section>
+
+	<section id="scoreboard">
+		<div class="scoreInfo">
+			<header><h2><span>scoreboard</span></h2></header>
+			<div id="score" class="left">
+				<p>Score<br/><span>9999</span></p>
+			</div>
+			<div id="time" class="right">
+				<p>Tijd<br/><span>00: 30</span></p>
+			</div>
+		</div>
+		<a href="#" id="btnBack" class="left"><span>btnBack</span></a>
+		<a href="#" id="btnInfo" class="right"><span>btnInfo</span></a>
+	</section>
+
+<footer>&nbsp;</footer>
+	{{#section "scripts"}}
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/vendor.js"></script>
+		<script src="js/app.js"></script>
+	{{/section}}
+</body>
+</html>
