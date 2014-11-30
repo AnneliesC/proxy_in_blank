@@ -21,6 +21,12 @@
 		"console": true,
 		"Peer": true,
 		"_": true,
+		"bean": true,
+		"requestAnimationFrame": true,
+		"requestAnimFrame": true,
+		"requestAnimFrame": true,
+		"headtrackr": true,
+		"AudioContext": true,
 		"Polymer": true
 	}
 }

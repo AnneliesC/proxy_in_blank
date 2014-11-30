@@ -1,8 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./_js/app.js":[function(require,module,exports){
+/* jshint newcap: false */
+
 (function(){
 
 	var Util = require("./modules/util/Util");
-	var Webcam = require("./modules/video/Webcam");
+	//var Webcam = require("./modules/video/Webcam");
 	var Comet = require("./modules/gameElements/Comet");
 	var Laser = require("./modules/gameElements/Laser");
 
@@ -38,18 +40,14 @@
 	var lblCountdown = document.getElementById("countdown");
 	var lblTips = document.getElementById("tips");
 	var svg = document.querySelector("svg");
-	var bounds,xPosSpaceship,comets,lasers,time;
+	var bounds,xPosSpaceship,comets,lasers;
 	var countdownTime = 3;
 	var countdownInterval,timerInterval,cometsInterval;
 	var score,time;
 
-  var audioContext;
-  var analyserNode;
-  var javascriptNode;
+  var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
   var sampleSize = 1024;
-  var amplitudeArray;
-  var audioStream;
-	//var prevXpos = 630;
+	var prevXpos = 630;
 
 	function init(){
 
@@ -104,7 +102,7 @@
 
 	function createLaser(){
 		var laser = new Laser({x:xPosSpaceship,y:window.innerHeight-120},comets);
-  	laser.target = {x:laser.position.x,y:50};
+		laser.target = {x:laser.position.x,y:50};
 		laser.move = true;
 		bean.on(laser,"top",function(){
 			svg.removeChild(laser.element);
@@ -134,8 +132,8 @@
 	function updateLabels(){
 		var minutes = Math.floor(time/60);
 		var seconds = time - minutes * 60;
-		if(minutes.toString().length === 1) minutes = "0"+minutes;
-		if(seconds.toString().length === 1) seconds = "0"+seconds;
+		if(minutes.toString().length === 1){minutes = "0"+minutes;}
+		if(seconds.toString().length === 1){seconds = "0"+seconds;}
 
 		lblScore.innerHTML = score;
 		lblTime.innerHTML = minutes+":"+seconds;
@@ -216,7 +214,7 @@
     try {
       audioContext = new AudioContext();
     } catch(e) {
-      alert('[App] Web Audio API is not supported in this browser');
+      console.log('[App] Web Audio API is not supported in this browser');
     }
 	}
 
@@ -229,26 +227,26 @@
 	}
 
 	function initAudio(stream){
-    sourceNode = audioContext.createMediaStreamSource(stream);
+    var sourceNode = audioContext.createMediaStreamSource(stream);
     audioStream = stream;
 
     analyserNode   = audioContext.createAnalyser();
     javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
     amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
 
-    javascriptNode.onaudioprocess = function () {
+    javascriptNode.onaudioprocess = function(){
 
         amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
         analyserNode.getByteTimeDomainData(amplitudeArray);
         requestAnimFrame(checkForClapping);
-    }
+    };
 
     sourceNode.connect(analyserNode);
     analyserNode.connect(javascriptNode);
     javascriptNode.connect(audioContext.destination);
 	}
 
-  function checkForClapping() {
+  function checkForClapping(){
     var minValue = 9999999;
     var maxValue = 0;
 
@@ -263,9 +261,7 @@
 
     currentValue = (maxValue-minValue)*1000;
     if (currentValue > 600){
-        if(xPosSpaceship !== 0){
-        	createLaser();
-        }
+        if(xPosSpaceship !== 0){createLaser();}
     }
   }
 
@@ -273,11 +269,11 @@
 
 	function checkHeadPosition(xPos,yPos){
 		if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
-    	light.setAttribute("class","green");
-    	btnstart.setAttribute("class","");
+			light.setAttribute("class","green");
+			btnstart.setAttribute("class","");
 		}else if((xPos < 280 || xPos > 380) && light.getAttribute("class") === "green"){
-    	light.setAttribute("class","red");
-    	btnstart.setAttribute("class","disabled");
+			light.setAttribute("class","red");
+			btnstart.setAttribute("class","disabled");
 		}
 	}
 
@@ -303,29 +299,21 @@
 	document.addEventListener("facetrackingEvent", function(event){
 
 		if(page === "game"){
-	    var offset = Util.map(
-	    	event.x,
-	    	640*0.20,
-	    	640-640*0.20,
-	    	window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),
-	    	spaceship.offsetWidth/2);
-	    	spaceship.style.left = offset+"px";
+			var offset = Util.map(event.x,640*0.20,640-640*0.20,window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),spaceship.offsetWidth/2);
+			spaceship.style.left = offset+"px";
 			xPosSpaceship = offset+spaceship.offsetWidth/2;
 
-	    // if(offset > prevXpos + 50){
-	    // 	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
-	    // }else if(offset < prevXpos - 50){
-	    // 	$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
-	    // }else{
-	    // 	//rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
-	    // 	//$("#rocket").removeClass("rotateRight");
-	    // 	//$("#rocket").removeClass("rotateLeft");
-	    // }
-
-	    //prevXpos = offset;
-
+			if(offset > prevXpos + 50){
+				spaceship.removeClass("rotateLeft").addClass("rotateRight");
+			}else if(offset < prevXpos - 50){
+				spaceship.removeClass("rotateRight").addClass("rotateLeft");
+			}else{
+				spaceship.removeClass("rotateRight");
+				spaceship.removeClass("rotateLeft");
+			}
+			prevXpos = offset;
 		}else if(page === "index"){
-    	checkHeadPosition(event.x,event.y);
+			checkHeadPosition(event.x,event.y);
 		}
 	});
 
@@ -333,7 +321,7 @@
 
 })();
 
-},{"./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Webcam":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Webcam.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+},{"./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -378,7 +366,7 @@ function Comet(position){
 
 module.exports = Comet;
 
-},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -427,7 +415,7 @@ function Laser(position,comets){
 
 module.exports = Laser;
 
-},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
 var namespace = "http://www.w3.org/2000/svg";
 
 function SVGHelper(){
@@ -440,7 +428,7 @@ SVGHelper.createElement = function(el){
 
 module.exports = SVGHelper;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK2/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
@@ -486,14 +474,5 @@ Util.map = function( value, min1, max1, min2, max2 )
 };
 
 module.exports = Util;
-
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Webcam.js":[function(require,module,exports){
-//var Util = require("../util/Util");
-
-function Webcam(element){
-	console.log("[Webcam]");
-}
-
-module.exports = Webcam;
 
 },{}]},{},["./_js/app.js"]);

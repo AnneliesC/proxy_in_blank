@@ -1,7 +1,9 @@
+/* jshint newcap: false */
+
 (function(){
 
 	var Util = require("./modules/util/Util");
-	var Webcam = require("./modules/video/Webcam");
+	//var Webcam = require("./modules/video/Webcam");
 	var Comet = require("./modules/gameElements/Comet");
 	var Laser = require("./modules/gameElements/Laser");
 
@@ -37,18 +39,14 @@
 	var lblCountdown = document.getElementById("countdown");
 	var lblTips = document.getElementById("tips");
 	var svg = document.querySelector("svg");
-	var bounds,xPosSpaceship,comets,lasers,time;
+	var bounds,xPosSpaceship,comets,lasers;
 	var countdownTime = 3;
 	var countdownInterval,timerInterval,cometsInterval;
 	var score,time;
 
-  var audioContext;
-  var analyserNode;
-  var javascriptNode;
+  var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
   var sampleSize = 1024;
-  var amplitudeArray;
-  var audioStream;
-	//var prevXpos = 630;
+	var prevXpos = 630;
 
 	function init(){
 
@@ -103,7 +101,7 @@
 
 	function createLaser(){
 		var laser = new Laser({x:xPosSpaceship,y:window.innerHeight-120},comets);
-  	laser.target = {x:laser.position.x,y:50};
+		laser.target = {x:laser.position.x,y:50};
 		laser.move = true;
 		bean.on(laser,"top",function(){
 			svg.removeChild(laser.element);
@@ -133,8 +131,8 @@
 	function updateLabels(){
 		var minutes = Math.floor(time/60);
 		var seconds = time - minutes * 60;
-		if(minutes.toString().length === 1) minutes = "0"+minutes;
-		if(seconds.toString().length === 1) seconds = "0"+seconds;
+		if(minutes.toString().length === 1){minutes = "0"+minutes;}
+		if(seconds.toString().length === 1){seconds = "0"+seconds;}
 
 		lblScore.innerHTML = score;
 		lblTime.innerHTML = minutes+":"+seconds;
@@ -215,7 +213,7 @@
     try {
       audioContext = new AudioContext();
     } catch(e) {
-      alert('[App] Web Audio API is not supported in this browser');
+      console.log('[App] Web Audio API is not supported in this browser');
     }
 	}
 
@@ -228,26 +226,26 @@
 	}
 
 	function initAudio(stream){
-    sourceNode = audioContext.createMediaStreamSource(stream);
+    var sourceNode = audioContext.createMediaStreamSource(stream);
     audioStream = stream;
 
     analyserNode   = audioContext.createAnalyser();
     javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
     amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
 
-    javascriptNode.onaudioprocess = function () {
+    javascriptNode.onaudioprocess = function(){
 
         amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
         analyserNode.getByteTimeDomainData(amplitudeArray);
         requestAnimFrame(checkForClapping);
-    }
+    };
 
     sourceNode.connect(analyserNode);
     analyserNode.connect(javascriptNode);
     javascriptNode.connect(audioContext.destination);
 	}
 
-  function checkForClapping() {
+  function checkForClapping(){
     var minValue = 9999999;
     var maxValue = 0;
 
@@ -262,9 +260,7 @@
 
     currentValue = (maxValue-minValue)*1000;
     if (currentValue > 600){
-        if(xPosSpaceship !== 0){
-        	createLaser();
-        }
+        if(xPosSpaceship !== 0){createLaser();}
     }
   }
 
@@ -272,11 +268,11 @@
 
 	function checkHeadPosition(xPos,yPos){
 		if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
-    	light.setAttribute("class","green");
-    	btnstart.setAttribute("class","");
+			light.setAttribute("class","green");
+			btnstart.setAttribute("class","");
 		}else if((xPos < 280 || xPos > 380) && light.getAttribute("class") === "green"){
-    	light.setAttribute("class","red");
-    	btnstart.setAttribute("class","disabled");
+			light.setAttribute("class","red");
+			btnstart.setAttribute("class","disabled");
 		}
 	}
 
@@ -302,29 +298,21 @@
 	document.addEventListener("facetrackingEvent", function(event){
 
 		if(page === "game"){
-	    var offset = Util.map(
-	    	event.x,
-	    	640*0.20,
-	    	640-640*0.20,
-	    	window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),
-	    	spaceship.offsetWidth/2);
-	    	spaceship.style.left = offset+"px";
+			var offset = Util.map(event.x,640*0.20,640-640*0.20,window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),spaceship.offsetWidth/2);
+			spaceship.style.left = offset+"px";
 			xPosSpaceship = offset+spaceship.offsetWidth/2;
 
-	   		if(offset > prevXpos + 50){
-	    	$("#rocket").removeClass("rotateLeft").addClass("rotateRight");
-	    	}else if(offset < prevXpos - 50){
-	    		$("#rocket").removeClass("rotateRight").addClass("rotateLeft");
-	    	}else{
-		    	rocket recht plaatsen, nog wat spelen met de marge dat dit smooth gebeurt
-		    	$("#rocket").removeClass("rotateRight");
-		    	$("#rocket").removeClass("rotateLeft");
-	    }
-
-	    prevXpos = offset;
-
+			if(offset > prevXpos + 50){
+				spaceship.removeClass("rotateLeft").addClass("rotateRight");
+			}else if(offset < prevXpos - 50){
+				spaceship.removeClass("rotateRight").addClass("rotateLeft");
+			}else{
+				spaceship.removeClass("rotateRight");
+				spaceship.removeClass("rotateLeft");
+			}
+			prevXpos = offset;
 		}else if(page === "index"){
-    	checkHeadPosition(event.x,event.y);
+			checkHeadPosition(event.x,event.y);
 		}
 	});
 
