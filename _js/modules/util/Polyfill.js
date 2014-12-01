@@ -1,4 +1,4 @@
 module.exports = (function(){
-	window.RequestAnimFrame = require('./RequestAnimationFrame');
-	window.RequestAudio = require('./RequestAudio');
+	window.requestAnimFrame = require('./RequestAnimationFrame');
+	window.requestAudio = require('./RequestAudio');
 })();

@@ -532,7 +532,7 @@ header .gametitle {
   display: block;
   position: absolute;
   bottom: -30px;
-  left: 47%;
+  left: 45%;
 }
 #game figure img {
   -webkit-transform: scale(0.6, 0.6);
