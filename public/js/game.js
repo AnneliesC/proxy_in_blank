@@ -9,7 +9,7 @@ var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
 
-var spaceship = document.getElementById("rocket");
+//var spaceship = document.getElementById("rocket");
 var btnInfo = document.getElementById("btninfo");
 var lblScore = document.getElementById("lblscore");
 var lblTime = document.getElementById("lbltime");
@@ -17,7 +17,7 @@ var lblCountdown = document.getElementById("countdown");
 var lblTips = document.getElementById("tips");
 var svg = document.querySelector("svg");
 
-var bounds,xPosSpaceship,comets,lasers;
+var bounds,comets,lasers;
 var countdownTime = 5;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
@@ -413,10 +413,6 @@ var supportMessages = {
 	"no camera": "No camera found. Using fallback video for facedetection."
 };
 
-Headtracker.getSpaceshipPosition = function(){
-	return xPosSpaceship;
-};
-
 /* HEAD TRACKING */
 
 document.addEventListener("headtrackrStatus",function(event){
@@ -451,6 +447,10 @@ function Headtracker(stream){
 	spaceship.style.left = window.innerWidth/2 - spaceship.offsetWidth;
 	xPosSpaceship = spaceship.offsetLeft + spaceship.offsetWidth/2;
 }
+
+Headtracker.getSpaceshipPosition = function(){
+	return xPosSpaceship;
+};
 
 module.exports = Headtracker;
 

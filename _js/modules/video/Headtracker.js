@@ -20,10 +20,6 @@ var supportMessages = {
 	"no camera": "No camera found. Using fallback video for facedetection."
 };
 
-Headtracker.getSpaceshipPosition = function(){
-	return xPosSpaceship;
-};
-
 /* HEAD TRACKING */
 
 document.addEventListener("headtrackrStatus",function(event){
@@ -58,5 +54,9 @@ function Headtracker(stream){
 	spaceship.style.left = window.innerWidth/2 - spaceship.offsetWidth;
 	xPosSpaceship = spaceship.offsetLeft + spaceship.offsetWidth/2;
 }
+
+Headtracker.getSpaceshipPosition = function(){
+	return xPosSpaceship;
+};
 
 module.exports = Headtracker;
