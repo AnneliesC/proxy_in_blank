@@ -50,7 +50,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
 
@@ -61,6 +61,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'reckless';
   src: url("../fonts/reckless/reckless-webfont.eot");
@@ -68,6 +69,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   font-weight: normal;
   font-style: normal;
 }
+
 body {
   font-size: 62.5%;
   font-family: quicksand;
@@ -77,31 +79,22 @@ body {
 }
 
 .gamestarted {
-  -webkit-animation: animatedBg 50s linear infinite;
   animation: animatedBg 50s linear infinite;
-}
-
-@-webkit-keyframes animatedBg {
-  from {
-    background-position: 0 0, 0 0;
-  }
-  to {
-    background-position: 0 602px, 0 425px;
-  }
 }
 
 @keyframes animatedBg {
   from {
     background-position: 0 0, 0 0;
   }
+
   to {
     background-position: 0 602px, 0 425px;
   }
 }
+
 video {
   margin: 10px auto 0;
   -webkit-transform: scaleX(-1);
-  -ms-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 
@@ -143,6 +136,7 @@ header .gametitle {
     top: 10px;
     left: 514px;
   }
+
   to {
     top: -50px;
     left: -70px;
@@ -152,6 +146,7 @@ header .gametitle {
     -o-transform: scale(0.4, 0.4);
   }
 }
+
 @-webkit-keyframes slide {
   from {
     top: 10px;
@@ -161,6 +156,7 @@ header .gametitle {
     -moz-transform: scale(1, 1);
     -o-transform: scale(1, 1);
   }
+
   to {
     top: -50px;
     left: -70px;
@@ -170,6 +166,7 @@ header .gametitle {
     -o-transform: scale(0.4, 0.4);
   }
 }
+
 #start {
   width: 1100px;
   margin: 120px auto 0;
@@ -264,7 +261,6 @@ header .gametitle {
 #rockets .webcam video {
   margin: 10px auto 0;
   -webkit-transform: scaleX(-1);
-  -ms-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 #rockets .webcam figure {
@@ -283,6 +279,8 @@ header .gametitle {
   right: -50px;
   -webkit-transform: scale(0.55, 0.55) rotate(-30deg);
   -ms-transform: scale(0.55, 0.55) rotate(-30deg);
+  -moz-transform: scale(0.55, 0.55) rotate(-30deg);
+  -o-transform: scale(0.55, 0.55) rotate(-30deg);
   transform: scale(0.55, 0.55) rotate(-30deg);
 }
 #rockets .webcam img[alt='helmet'] {
@@ -290,6 +288,8 @@ header .gametitle {
   margin: -17px auto 0;
   -webkit-transform: scale(0.85, 0.85);
   -ms-transform: scale(0.85, 0.85);
+  -moz-transform: scale(0.85, 0.85);
+  -o-transform: scale(0.85, 0.85);
   transform: scale(0.85, 0.85);
 }
 #rockets .webcam span {
@@ -301,10 +301,14 @@ header .gametitle {
 }
 #rockets .webcam .green {
   background-color: #46c846;
+  -webkit-box-shadow: 0 0 8px 5px rgba(70, 200, 70, 0.7);
+  -moz-box-shadow: 0 0 8px 5px rgba(70, 200, 70, 0.7);
   box-shadow: 0 0 8px 5px rgba(70, 200, 70, 0.7);
 }
 #rockets .webcam .red {
   background-color: #fff000;
+  -webkit-box-shadow: 0 0 8px 5px rgba(255, 0, 0, 0.7);
+  -moz-box-shadow: 0 0 8px 5px rgba(255, 0, 0, 0.7);
   box-shadow: 0 0 8px 5px rgba(255, 0, 0, 0.7);
 }
 
@@ -369,34 +373,42 @@ header .gametitle {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
+
 @-webkit-keyframes darkerLeft {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
+
 @keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
+
 @-webkit-keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
+
 #game {
   width: 100%;
   height: 100%;
@@ -555,9 +567,13 @@ header .gametitle {
   width: 235px;
   text-transform: uppercase;
   margin-top: 18px;
+  -moz-box-shadow: 3px 3px #e1cc84;
+  -webkit-box-shadow: 3px 3px #e1cc84;
   box-shadow: 3px 3px #e1cc84;
 }
 #game .stats #btnagain:hover {
+  -moz-box-shadow: 0 0;
+  -webkit-box-shadow: 0 0;
   box-shadow: 0 0;
   margin-top: 21px;
   margin-left: 125px;
@@ -687,9 +703,13 @@ ol li:before {
   padding-bottom: 4px;
   text-align: center;
   text-transform: uppercase;
+  -moz-box-shadow: 3px 3px #e1cc84;
+  -webkit-box-shadow: 3px 3px #e1cc84;
   box-shadow: 3px 3px #e1cc84;
 }
 #form input[type='submit']:hover {
+  -moz-box-shadow: 0 0;
+  -webkit-box-shadow: 0 0;
   box-shadow: 0 0;
   margin-top: 33px;
   margin-right: 8px;
@@ -699,50 +719,62 @@ ol li:before {
   from {
     margin-top: -100px;
   }
+
   to {
     margin-top: 0;
   }
 }
+
 @-webkit-keyframes slideDown {
   from {
     margin-top: -100px;
   }
+
   to {
     margin-top: 0;
   }
 }
+
 @keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
+
 @-webkit-keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
+
 @keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
+
 @-webkit-keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
+
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
+
 .left {
   float: left;
 }
@@ -775,7 +807,6 @@ ol li:before {
   border: solid 1px #000;
   margin: 10px;
   -webkit-transform: scaleX(-1);
-  -ms-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 
