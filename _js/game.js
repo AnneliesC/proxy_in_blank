@@ -51,7 +51,7 @@ function _createComet(){
 }
 
 function _createLaser(){
-	var laser = new Laser({x:Headtracker.getSpaceshipPosition(),y:window.innerHeight-120},comets);
+	var laser = new Laser({x:Headtracker.getSpaceshipPosition(),y:window.innerHeight-210},comets);
 	laser.target = {x:laser.position.x,y:50};
 	laser.move = true;
 	bean.on(laser,"top",function(){
@@ -125,7 +125,7 @@ function _getUserMedia(){
 }
 
 function _userErrorHandler(error){
-	console.log("[DetectClapping] audio error");
+	console.log("[Game] webcam error");
 }
 
 function _initStream(stream){
@@ -133,7 +133,7 @@ function _initStream(stream){
 	var detectClapping = new DetectClapping(stream);
 	bean.on(detectClapping,"shoot", _createLaser);
 
-	headtracker = new Headtracker(stream);
+	headtracker = new Headtracker(stream,"game");
 	_startCountDown();
 }
 
