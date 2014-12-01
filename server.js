@@ -1,7 +1,5 @@
 /* globals process:true */
 
-var port = process.env.PORT;
-
 var express = require("express");
 var app = express();
 var server = require('http').Server(app);
@@ -22,8 +20,8 @@ require("./controllers/pages.js")(app, auth);
 require("./controllers/auth.js")(app, auth, passport, util, mongoose.models.User);
 require("./controllers/api.js")(app, auth, mongoose.models);
 
-var port = process.env.PORT;
+//var port = process.env.PORT;
 
-server.listen(port, function() {
-  console.log('Server listening at port ',port, 'in', process.env.NODE_ENV,"mode");
+server.listen(process.env.PORT, function() {
+  console.log('Server listening at port ', process.env.PORT, 'in', process.env.NODE_ENV,"mode");
 });
