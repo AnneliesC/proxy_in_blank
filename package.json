@@ -21,6 +21,9 @@
     "lodash": "^2.4.1",
     "method-override": "^2.3.0",
     "mongoose": "^3.8.17",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "peerjs": "^0.3.10",
     "socket.io": "^1.1.0"
   },
   "engines": {

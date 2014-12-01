@@ -36,13 +36,13 @@ body {
 	color: #fff;
 }
 
+.gamestarted {
+	animation: animatedBg 50s linear infinite;
+}
+
 @keyframes animatedBg {
 	from { background-position: 0 0, 0 0; }
 	to { background-position: 0 602px, 0 425px; }
-}
-
-.gamestarted {
-	animation: animatedBg 50s linear infinite;
 }
 
 video {
