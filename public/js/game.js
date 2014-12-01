@@ -16,6 +16,7 @@ var lblTime = document.getElementById("lbltime");
 var lblCountdown = document.getElementById("countdown");
 var lblTips = document.getElementById("tips");
 var svg = document.querySelector("svg");
+var spaceship = document.getElementById("rocket");
 
 var bounds,comets,lasers;
 var countdownTime = 5;
@@ -109,10 +110,22 @@ function _startCountDown(){
 	countdownInterval = setInterval(_countdown, 1000);
 }
 
+function _checkCollision(){
+	var xPos = Headtracker.getSpaceshipPosition();
+
+	for(var i=0; i<comets.length;i++){
+		var comet = comets[i];
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+			console.log("DOOD");
+		}
+	}
+}
+
 /* CLICKHANDLERS */
 
 function _btnInfoClickHandler(event){
 	event.preventDefault();
+	clearInterval(timerInterval);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -126,7 +139,7 @@ function _getUserMedia(){
 }
 
 function _userErrorHandler(error){
-	console.log("[Game] webcam error");
+	console.log("[Game] audio error");
 }
 
 function _initStream(stream){
@@ -135,6 +148,7 @@ function _initStream(stream){
 	bean.on(detectClapping,"shoot", _createLaser);
 
 	headtracker = new Headtracker(stream,"game");
+	bean.on(headtracker,"moved",_checkCollision);
 	_startCountDown();
 }
 
@@ -171,9 +185,9 @@ function _checkForClapping(){
 
   for (var i = 0; i < amplitudeArray.length; i++) {
       var value = amplitudeArray[i] / 256;
-      if(value > maxValue) {
+      if(value > maxValue){
           maxValue = value;
-      } else if(value < minValue) {
+      }else if(value < minValue){
           minValue = value;
       }
   }
@@ -402,6 +416,8 @@ var spaceship = document.getElementById("rocket");
 var light = document.getElementById("light");
 var btnStart = document.getElementById("btnstart");
 
+var that;
+
 var statusMessages = {
 	"whitebalance": "checking for stability of camera whitebalance",
 	"detecting": "Detecting face",
@@ -451,6 +467,7 @@ document.addEventListener("facetrackingEvent", function(event){
 		var offset = Util.map(event.x,640*0.30,640-640*0.30,window.innerWidth-(spaceship.offsetWidth/2)-(spaceship.offsetWidth/2),spaceship.offsetWidth/2);
 		spaceship.style.left = offset+"px";
 		xPosSpaceship = offset+spaceship.offsetWidth/2;
+		bean.fire(that,"moved");
 	}else if(page === "index"){
     _checkHeadPosition(event.x,event.y);
 	}
@@ -458,6 +475,7 @@ document.addEventListener("facetrackingEvent", function(event){
 
 function Headtracker(stream,currentPage){
 	console.log("[Headtracker]");
+	that = this;
 	page = currentPage;
 	videoInput.setAttribute("src",window.URL.createObjectURL(stream));
 	if(page === "game"){

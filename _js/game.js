@@ -15,6 +15,7 @@ var lblTime = document.getElementById("lbltime");
 var lblCountdown = document.getElementById("countdown");
 var lblTips = document.getElementById("tips");
 var svg = document.querySelector("svg");
+var spaceship = document.getElementById("rocket");
 
 var bounds,comets,lasers;
 var countdownTime = 5;
@@ -108,10 +109,22 @@ function _startCountDown(){
 	countdownInterval = setInterval(_countdown, 1000);
 }
 
+function _checkCollision(){
+	var xPos = Headtracker.getSpaceshipPosition();
+
+	for(var i=0; i<comets.length;i++){
+		var comet = comets[i];
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+			console.log("DOOD");
+		}
+	}
+}
+
 /* CLICKHANDLERS */
 
 function _btnInfoClickHandler(event){
 	event.preventDefault();
+	clearInterval(timerInterval);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -125,7 +138,7 @@ function _getUserMedia(){
 }
 
 function _userErrorHandler(error){
-	console.log("[Game] webcam error");
+	console.log("[Game] audio error");
 }
 
 function _initStream(stream){
@@ -134,6 +147,7 @@ function _initStream(stream){
 	bean.on(detectClapping,"shoot", _createLaser);
 
 	headtracker = new Headtracker(stream,"game");
+	bean.on(headtracker,"moved",_checkCollision);
 	_startCountDown();
 }
 
