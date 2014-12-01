@@ -8,9 +8,9 @@ function _checkForClapping(){
 
   for (var i = 0; i < amplitudeArray.length; i++) {
       var value = amplitudeArray[i] / 256;
-      if(value > maxValue) {
+      if(value > maxValue){
           maxValue = value;
-      } else if(value < minValue) {
+      }else if(value < minValue){
           minValue = value;
       }
   }
