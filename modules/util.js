@@ -7,6 +7,16 @@ module.exports = {
 			}
 		}
 		return true;
+	},
+
+	validate: function(user) {
+		var errors = {};
+
+		if(!user.username){
+			errors.username = "FILL IN A GODDAMN USERNAME";
+		}
+
+		return errors;
 	}
 
 };

@@ -409,6 +409,7 @@ header {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	z-index: 1;
 
 	.webcam {
 		text-align: center;
@@ -544,19 +545,31 @@ header {
 			-o-transform: scale(.6, .6);
 		}
 	}
+}
+
+#highscores {
+	position: absolute;
+	z-index: 9999;
+	top: 100%;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-transition: .3s cubic-bezier(.545, .035, .460, .950);
+	-moz-transition: .3s cubic-bezier(.545, .035, .460, .950);
+	transition: .3s cubic-bezier(.545, .035, .460, .950);
 
 	.stats {
 		position: absolute;
-		top: 180px;
+		top: 150px;
 		left: 420px;
 		background-color: $bluecolor;
 		width: 600px;
 		height: 530px;
-		z-index: 1;
+		z-index: 9;
 		border-radius: 10px;
 		border: 1px dashed #fff;
 
-		#highscore {
+		h2 {
 			background: url('../images/title_scores.png')no-repeat;
 			width: 321px;
 			height: 53px;
@@ -587,6 +600,10 @@ header {
 				-moz-box-shadow: 0 0; -webkit-box-shadow: 0 0; box-shadow: 0 0; margin-top: 21px; margin-left: 125px; }
 			}
 	}
+}
+
+.show {
+	top: 0 !important;
 }
 
 .scoreinfo {
@@ -694,10 +711,6 @@ ol {
 	p {
 		color: $yellowcolor;
 		margin-left: 10px;
-	}
-
-	label {
-		visibility: hidden;
 	}
 
 	.left {

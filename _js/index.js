@@ -30,6 +30,7 @@ function _userErrorHandler(error){
 
 function _initStream(stream){
 	headtracker = new Headtracker(stream,"index");
+	Headtracker.startHeadtracking();
 	btnStart.addEventListener("click", _btnStartClickHandler);
 }
 
@@ -37,7 +38,7 @@ function _initStream(stream){
 
 function init(){
 	_getUserMedia();
-	if (navigator.getUserMedia) {
+	if (navigator.getUserMedia){
 		navigator.getUserMedia({audio: true, video: true}, _initStream, _userErrorHandler);
 	}else{
 		console.log("[Index] fallback");

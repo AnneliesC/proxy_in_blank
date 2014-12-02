@@ -16,12 +16,14 @@ var lblCountdown = document.getElementById("countdown");
 var lblTips = document.getElementById("tips");
 var svg = document.querySelector("svg");
 var spaceship = document.getElementById("rocket");
+var highscores = document.getElementById("highscores");
 
 var bounds,comets,lasers;
 var countdownTime = 5;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
+var gamePaused;
 
 /* GAME LOGIC  */
 
@@ -52,6 +54,7 @@ function _createComet(){
 }
 
 function _createLaser(){
+	if(gamePaused){ return; }
 	var laser = new Laser({x:Headtracker.getSpaceshipPosition(),y:window.innerHeight-210},comets);
 	laser.target = {x:laser.position.x,y:50};
 	laser.move = true;
@@ -86,10 +89,74 @@ function _timer(){
 	_updateLabels();
 }
 
-function _startGame(){
-	console.log("[App] init game settings");
+function _checkCollision(){
+	var xPos = Headtracker.getSpaceshipPosition();
+
+	for(var i=0; i<comets.length;i++){
+		var comet = comets[i];
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+			console.log("DOOD");
+		}
+	}
+}
+
+/* TIMERS */
+
+function _setTimers(){
 	cometsInterval = setInterval(_createComet, 2000);
 	timerInterval = setInterval(_timer, 1000);
+}
+
+/* PAUSE - PLAY */
+
+function _showHighscores(){
+	highscores.setAttribute("class","show");
+}
+
+function _hideHighscores(){
+	highscores.setAttribute("class","");
+}
+
+function _pauseGame(){
+	Headtracker.stopHeadtracking();
+	clearInterval(timerInterval);
+	clearInterval(cometsInterval);
+
+	for(var i=0;i<comets.length;i++){
+		comets[i].move = false;
+	}
+	_showHighscores();
+}
+
+function _resumeGame(){
+	Headtracker.startHeadtracking();
+	_setTimers();
+
+	for(var i=0;i<comets.length;i++){
+		comets[i].move = true;
+	}
+	_hideHighscores();
+}
+
+/* CLICKHANDLERS */
+
+function _btnInfoClickHandler(event){
+	event.preventDefault();
+	if(gamePaused){
+		_resumeGame();
+	}else{
+		_pauseGame();
+	}
+	gamePaused = !gamePaused;
+}
+
+/* COUNTDOWN - START GAME */
+
+function _startGame(){
+	console.log("[App] init game settings");
+	_setTimers();
+	gamePaused = false;
+	btnInfo.addEventListener("click", _btnInfoClickHandler);
 }
 
 function _countdown(){
@@ -107,24 +174,6 @@ function _startCountDown(){
 	_resetGameSettings();
 	lblCountdown.innerHTML = countdownTime;
 	countdownInterval = setInterval(_countdown, 1000);
-}
-
-function _checkCollision(){
-	var xPos = Headtracker.getSpaceshipPosition();
-
-	for(var i=0; i<comets.length;i++){
-		var comet = comets[i];
-		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
-			console.log("DOOD");
-		}
-	}
-}
-
-/* CLICKHANDLERS */
-
-function _btnInfoClickHandler(event){
-	event.preventDefault();
-	clearInterval(timerInterval);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -147,6 +196,7 @@ function _initStream(stream){
 	bean.on(detectClapping,"shoot", _createLaser);
 
 	headtracker = new Headtracker(stream,"game");
+	Headtracker.startHeadtracking();
 	bean.on(headtracker,"moved",_checkCollision);
 	_startCountDown();
 }
@@ -167,8 +217,6 @@ function _init(){
 	}else{
 		console.log("[Game] fallback");
 	}
-
-	btnInfo.addEventListener("click", _btnInfoClickHandler);
 }
 
 _init();

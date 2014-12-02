@@ -17,12 +17,14 @@ var lblCountdown = document.getElementById("countdown");
 var lblTips = document.getElementById("tips");
 var svg = document.querySelector("svg");
 var spaceship = document.getElementById("rocket");
+var highscores = document.getElementById("highscores");
 
 var bounds,comets,lasers;
 var countdownTime = 5;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
+var gamePaused;
 
 /* GAME LOGIC  */
 
@@ -53,6 +55,7 @@ function _createComet(){
 }
 
 function _createLaser(){
+	if(gamePaused){ return; }
 	var laser = new Laser({x:Headtracker.getSpaceshipPosition(),y:window.innerHeight-210},comets);
 	laser.target = {x:laser.position.x,y:50};
 	laser.move = true;
@@ -87,10 +90,74 @@ function _timer(){
 	_updateLabels();
 }
 
-function _startGame(){
-	console.log("[App] init game settings");
+function _checkCollision(){
+	var xPos = Headtracker.getSpaceshipPosition();
+
+	for(var i=0; i<comets.length;i++){
+		var comet = comets[i];
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+			console.log("DOOD");
+		}
+	}
+}
+
+/* TIMERS */
+
+function _setTimers(){
 	cometsInterval = setInterval(_createComet, 2000);
 	timerInterval = setInterval(_timer, 1000);
+}
+
+/* PAUSE - PLAY */
+
+function _showHighscores(){
+	highscores.setAttribute("class","show");
+}
+
+function _hideHighscores(){
+	highscores.setAttribute("class","");
+}
+
+function _pauseGame(){
+	Headtracker.stopHeadtracking();
+	clearInterval(timerInterval);
+	clearInterval(cometsInterval);
+
+	for(var i=0;i<comets.length;i++){
+		comets[i].move = false;
+	}
+	_showHighscores();
+}
+
+function _resumeGame(){
+	Headtracker.startHeadtracking();
+	_setTimers();
+
+	for(var i=0;i<comets.length;i++){
+		comets[i].move = true;
+	}
+	_hideHighscores();
+}
+
+/* CLICKHANDLERS */
+
+function _btnInfoClickHandler(event){
+	event.preventDefault();
+	if(gamePaused){
+		_resumeGame();
+	}else{
+		_pauseGame();
+	}
+	gamePaused = !gamePaused;
+}
+
+/* COUNTDOWN - START GAME */
+
+function _startGame(){
+	console.log("[App] init game settings");
+	_setTimers();
+	gamePaused = false;
+	btnInfo.addEventListener("click", _btnInfoClickHandler);
 }
 
 function _countdown(){
@@ -108,24 +175,6 @@ function _startCountDown(){
 	_resetGameSettings();
 	lblCountdown.innerHTML = countdownTime;
 	countdownInterval = setInterval(_countdown, 1000);
-}
-
-function _checkCollision(){
-	var xPos = Headtracker.getSpaceshipPosition();
-
-	for(var i=0; i<comets.length;i++){
-		var comet = comets[i];
-		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
-			console.log("DOOD");
-		}
-	}
-}
-
-/* CLICKHANDLERS */
-
-function _btnInfoClickHandler(event){
-	event.preventDefault();
-	clearInterval(timerInterval);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -148,6 +197,7 @@ function _initStream(stream){
 	bean.on(detectClapping,"shoot", _createLaser);
 
 	headtracker = new Headtracker(stream,"game");
+	Headtracker.startHeadtracking();
 	bean.on(headtracker,"moved",_checkCollision);
 	_startCountDown();
 }
@@ -168,13 +218,11 @@ function _init(){
 	}else{
 		console.log("[Game] fallback");
 	}
-
-	btnInfo.addEventListener("click", _btnInfoClickHandler);
 }
 
 _init();
 
-},{"./modules/audio/DetectClapping":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
+},{"./modules/audio/DetectClapping":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
 
 var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
 var sampleSize = 1024;
@@ -234,7 +282,7 @@ function DetectClapping(stream){
 
 module.exports = DetectClapping;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -279,7 +327,7 @@ function Comet(position){
 
 module.exports = Comet;
 
-},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -328,7 +376,7 @@ function Laser(position,comets){
 
 module.exports = Laser;
 
-},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
 var namespace = "http://www.w3.org/2000/svg";
 
 function SVGHelper(){
@@ -341,23 +389,23 @@ SVGHelper.createElement = function(el){
 
 module.exports = SVGHelper;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
 module.exports = (function(){
 	window.requestAnimFrame = require('./RequestAnimationFrame');
 	window.requestAudio = require('./RequestAudio');
 })();
 
-},{"./RequestAnimationFrame":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
+},{"./RequestAnimationFrame":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
 module.exports = (function(){
 	return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element){window.setTimeout(callback, 1000 / 60); };
 })();
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
 module.exports = (function(){
   return  window.AudioContext || window.webkitAudioContext  || window.mozAudioContext;
 })();
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
@@ -404,7 +452,7 @@ Util.map = function( value, min1, max1, min2, max2 )
 
 module.exports = Util;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
 var Util = require("../util/Util");
 
 var htracker,page;
@@ -432,6 +480,13 @@ var supportMessages = {
 	"no camera": "No camera found. Using fallback video for facedetection"
 };
 
+htracker = new headtrackr.Tracker({
+  ui: false,
+  headPosition: false,
+  facedetection: 100
+});
+htracker.init(videoInput, canvasInput);
+
 /* HEAD TRACKING */
 function _checkHeadPosition(xPos,yPos){
 	if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
@@ -453,14 +508,6 @@ document.addEventListener("headtrackrStatus",function(event){
       //console.log("statusMessage",statusMessages[event.status]);
   }
 },true);
-
-htracker = new headtrackr.Tracker({
-  ui: false,
-  headPosition: false,
-  facedetection: 100
-});
-htracker.init(videoInput, canvasInput);
-htracker.start();
 
 document.addEventListener("facetrackingEvent", function(event){
 	if(page === "game"){
@@ -488,6 +535,14 @@ Headtracker.getSpaceshipPosition = function(){
 	return xPosSpaceship;
 };
 
+Headtracker.startHeadtracking = function(){
+	htracker.start();
+};
+
+Headtracker.stopHeadtracking = function(){
+	htracker.stop();
+};
+
 module.exports = Headtracker;
 
-},{"../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);
+},{"../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);

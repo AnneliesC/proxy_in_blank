@@ -25,6 +25,13 @@ var supportMessages = {
 	"no camera": "No camera found. Using fallback video for facedetection"
 };
 
+htracker = new headtrackr.Tracker({
+  ui: false,
+  headPosition: false,
+  facedetection: 100
+});
+htracker.init(videoInput, canvasInput);
+
 /* HEAD TRACKING */
 function _checkHeadPosition(xPos,yPos){
 	if(xPos > 280 && xPos < 380 && light.getAttribute("class") === "red"){
@@ -46,14 +53,6 @@ document.addEventListener("headtrackrStatus",function(event){
       //console.log("statusMessage",statusMessages[event.status]);
   }
 },true);
-
-htracker = new headtrackr.Tracker({
-  ui: false,
-  headPosition: false,
-  facedetection: 100
-});
-htracker.init(videoInput, canvasInput);
-htracker.start();
 
 document.addEventListener("facetrackingEvent", function(event){
 	if(page === "game"){
@@ -79,6 +78,14 @@ function Headtracker(stream,currentPage){
 
 Headtracker.getSpaceshipPosition = function(){
 	return xPosSpaceship;
+};
+
+Headtracker.startHeadtracking = function(){
+	htracker.start();
+};
+
+Headtracker.stopHeadtracking = function(){
+	htracker.stop();
 };
 
 module.exports = Headtracker;
