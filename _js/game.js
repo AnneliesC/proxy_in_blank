@@ -11,6 +11,8 @@ var DetectClapping = require("./modules/audio/DetectClapping");
 var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
 var btnAgain = document.getElementById("btnagain");
+var btnSend = document.getElementById("btnSend");
+
 var lblScore = document.getElementById("lblscore");
 var lblTime = document.getElementById("lbltime");
 var lblCountdown = document.getElementById("countdown");
@@ -211,6 +213,10 @@ function _startCountDown(){
 
 /* CLICKHANDLERS */
 
+function _btnSendClickHandler(event){
+	event.preventDefault();
+}
+
 function _btnBackClickHandler(event){
 	event.preventDefault();
 	window.location = "./";
@@ -264,6 +270,7 @@ function _init(){
 	}
 	btnAgain.addEventListener("click", _btnAgainClickHandler);
 	btnBack.addEventListener("click", _btnBackClickHandler);
+	btnSend.addEventListener("click", _btnSendClickHandler);
 }
 
 _init();
