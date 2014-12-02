@@ -15,6 +15,7 @@ module.exports = function(app, auth, passport, util, User){
 		var errors = auth.validate(post);
 
 		if(util.isEmpty(errors)){
+			console.log("geen errors");
 			var user = new User(post);
 			user.save(function(err){
 				if(err){
@@ -22,18 +23,23 @@ module.exports = function(app, auth, passport, util, User){
 					if(err.code === 11000){
 						error = "TZIT AL NE MUTN IP UJ USERNAME";
 					}
+					console.log(err);
 					res.render("highscore", {error: error, title: "highscore"});
 				} else {
-					console.log("feedback highscore verzonden");
-					//res.redirect("/");
+					User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
+						res.render("highscore",{title: "highscore", bodyClass:"gamestarted", highscore: highscore, highscoresend: true });
+					});
 				}
 			});
 		} else {
-			res.render("highscore", {
-			error: "Please fill in all fields",
-			errors: errors,
-			title: "highscore",
-			post: post
+
+			console.log("errors");
+			User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
+				res.render("highscore",{title: "highscore", bodyClass:"gamestarted", highscore: highscore,
+				error: "Please fill in all fields",
+				post: post,
+				errors: errors
+				});
 			});
 		}
 		//res.redirect("/");

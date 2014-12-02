@@ -660,10 +660,13 @@ ol li:before {
 #form label {
   visibility: hidden;
 }
+#form .left {
+  width: 350px;
+}
 #form input[type='text'] {
   border-radius: 10px;
   border: 0;
-  width: 318px;
+  width: 300px;
   font-family: quicksand;
   font-size: 1.4em;
   padding: 5px;
@@ -679,7 +682,7 @@ ol li:before {
   height: 30px;
   border: 0;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 20px;
   margin-right: 10px;
   color: #e1cc84;
   font-size: 1em;
@@ -691,8 +694,11 @@ ol li:before {
 }
 #form input[type='submit']:hover {
   box-shadow: 0 0;
-  margin-top: 33px;
-  margin-right: 8px;
+  margin-top: 23px;
+  margin-right: 7px;
+}
+#form .error input {
+  border: solid #b2432e 2px;
 }
 #form #points {
   display: none;

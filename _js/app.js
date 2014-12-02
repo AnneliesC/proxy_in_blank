@@ -4,7 +4,7 @@
 require("./modules/util/Polyfill");
 
 var chkNotifiable = document.getElementById("chkNotifiable");
-
+var btnAgain = document.getElementById("btnagain");
 /* CLICKHANDLERS */
 
 function _chkNotifiableClickHandler(event){
@@ -23,10 +23,20 @@ function _chkNotifiableClickHandler(event){
 		});
 }
 
+function _btnRetryClickHandler(event){
+	//event.preventDefault();
+	window.location = "/";
+}
+
 /* INIT */
 
 function init(){
-	chkNotifiable.addEventListener("click", _chkNotifiableClickHandler);
+	if (document.getElementById('chkNotifiable')) {
+		chkNotifiable.addEventListener("click", _chkNotifiableClickHandler);
+	}
+	if (document.getElementById('btnagain')) {
+		btnAgain.addEventListener("click", _btnRetryClickHandler);
+	}
 }
 
 init();
