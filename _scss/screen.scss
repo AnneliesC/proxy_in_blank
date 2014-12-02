@@ -577,28 +577,6 @@ header {
 			top: -25px;
 			left: 145px;
 		}
-
-		#btnagain {
-			background-color: $orangecolor;
-			margin: 0 auto;
-			display: block;
-			text-align: center;
-			color: $yellowcolor;
-			text-decoration: none;
-			font-family: Arial;
-			font-size: 2.5em;
-			padding: 10px;
-			width: 235px;
-			text-transform: uppercase;
-			margin-top: 18px;
-
-			-moz-box-shadow: 3px 3px $yellowcolor;
-			-webkit-box-shadow: 3px 3px $yellowcolor;
-			box-shadow: 3px 3px $yellowcolor;
-
-			&:hover {
-				-moz-box-shadow: 0 0; -webkit-box-shadow: 0 0; box-shadow: 0 0; margin-top: 21px; margin-left: 125px; }
-			}
 	}
 }
 
@@ -876,4 +854,27 @@ ol {
 	top: 100px;
 	left: 50%;
 	background-color: #f00;
+}
+
+#btnagain {
+	background-color: $orangecolor;
+	margin: 0 auto;
+	display: block;
+	text-align: center;
+	color: $yellowcolor;
+	text-decoration: none;
+	font-family: Arial;
+	font-size: 2.5em;
+	padding: 10px;
+	width: 235px;
+	text-transform: uppercase;
+	margin-top: 18px;
+
+	-moz-box-shadow: 3px 3px $yellowcolor;
+	-webkit-box-shadow: 3px 3px $yellowcolor;
+	box-shadow: 3px 3px $yellowcolor;
+
+	&:hover {
+		-moz-box-shadow: 0 0; -webkit-box-shadow: 0 0; box-shadow: 0 0; margin-top: 21px; margin-left: 125px;
+	}
 }

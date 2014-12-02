@@ -27,6 +27,18 @@ var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
 
+/* API */
+
+function _httpGet(url)
+{
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", url, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
 function _updateLabels(){
 	var minutes = Math.floor(time/60);
 	var seconds = time - minutes * 60;
@@ -99,6 +111,7 @@ function _showHighscores(){
 }
 
 function _pauseGame(){
+	gamePaused = true;
 	Headtracker.stopHeadtracking();
 	clearInterval(timerInterval);
 	clearInterval(cometsInterval);
@@ -109,6 +122,7 @@ function _pauseGame(){
 }
 
 function _resumeGame(){
+	gamePaused = false;
 	Headtracker.startHeadtracking();
 	_setTimers();
 
@@ -128,16 +142,35 @@ function _resetGameSettings(){
 	lblTime.innerHTML = "00:00";
 }
 
+function _gameOver(){
+	var users = $.parseJSON(_httpGet("./api/users"));
+
+	var usersWithHigherScores = _.filter(users, function(user){
+		return user.points >= score;
+	});
+
+	if(usersWithHigherScores.length <= 4){
+		console.log("top5");
+		document.getElementById("noTop5").setAttribute("class","display-none");
+	}else{
+		console.log("geen top5,loser");
+		document.getElementById("top5").setAttribute("class","display-none");
+		document.getElementById("noTop5").setAttribute("class","");
+	}
+
+	_pauseGame();
+	document.getElementById("points").setAttribute("value",score);
+	$(".gainedPoints").text(""+score);
+	_showHighscores();
+}
+
 function _checkCollision(){
 	var xPos = Headtracker.getSpaceshipPosition();
 
 	for(var i=0; i<comets.length;i++){
 		var comet = comets[i];
 		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
-			_pauseGame();
-			gamePaused = true;
-			document.getElementById("points").setAttribute("value",score);
-			_showHighscores();
+			_gameOver();
 		}
 	}
 }
@@ -151,7 +184,6 @@ function _btnInfoClickHandler(event){
 	}else{
 		_pauseGame();
 	}
-	gamePaused = !gamePaused;
 }
 
 function _startGame(){

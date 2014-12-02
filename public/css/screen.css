@@ -570,26 +570,6 @@ header .gametitle {
   top: -25px;
   left: 145px;
 }
-#highscores .stats #btnagain {
-  background-color: #b2432e;
-  margin: 0 auto;
-  display: block;
-  text-align: center;
-  color: #e1cc84;
-  text-decoration: none;
-  font-family: Arial;
-  font-size: 2.5em;
-  padding: 10px;
-  width: 235px;
-  text-transform: uppercase;
-  margin-top: 18px;
-  box-shadow: 3px 3px #e1cc84;
-}
-#highscores .stats #btnagain:hover {
-  box-shadow: 0 0;
-  margin-top: 21px;
-  margin-left: 125px;
-}
 
 .show {
   top: 0 !important;
@@ -841,4 +821,25 @@ ol li:before {
   top: 100px;
   left: 50%;
   background-color: #f00;
+}
+
+#btnagain {
+  background-color: #b2432e;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  color: #e1cc84;
+  text-decoration: none;
+  font-family: Arial;
+  font-size: 2.5em;
+  padding: 10px;
+  width: 235px;
+  text-transform: uppercase;
+  margin-top: 18px;
+  box-shadow: 3px 3px #e1cc84;
+}
+#btnagain:hover {
+  box-shadow: 0 0;
+  margin-top: 21px;
+  margin-left: 125px;
 }

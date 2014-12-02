@@ -57,30 +57,35 @@
 			</ol>
 			<section class="feedback">
 				<!-- ALS JE DE TOP 5 HAALT -->
-				{{#if highscoresend}}
-					<header><h4>Je highscore is verzonden!</header>
-					<a href="#" id="btnagain"><span>speel nog eens!</span></a>
-				{{else}}
-					<header><h4>Je haalde de top 5 met <span>102936</span> punten!</h4></header>
-					<form method="post" action="#" id="form">
-						<div class="left">
-							{{#if errors.username}}<div class="error">{{/if}}
-									<label for="txtName" class="display-none">naam</label><br/>
-									<input type="text"  id="txtName" name="username" value="{{post.username}}" placeholder="Vul je naam in"/><br/>
-							{{#if errors.username}}</div>{{/if}}
-							<input type="checkbox" id="chkNotifiable" name="notifiable">
-							<label for="chkNotifiable">Laat mij weten als mijn record verbroken is!</label><br>
-								<input type="text" id="points" name="points" value=""/>
-						</div>
-						<div class="right">
-							<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
-					  </div>
-					</form>
-				{{/if}}
+				<div id="top5">
+					{{#if highscoresend}}
+						<header><h4>Je highscore is verzonden!</header>
+						<a href="#" id="btnagain"><span>speel nog eens!</span></a>
+					{{else}}
+						<header><h4>Je haalde de top 5 met <span class="gainedPoints">102936</span> punten!</h4></header>
+						<form method="post" action="#" id="form">
+							<div class="left">
+								{{#if errors.username}}<div class="error">{{/if}}
+										<label for="txtName" class="display-none">naam</label><br/>
+										<input type="text"  id="txtName" name="username" value="{{post.username}}" placeholder="Vul je naam in"/><br/>
+								{{#if errors.username}}</div>{{/if}}
+								<input type="checkbox" id="chkNotifiable" name="notifiable">
+								<label for="chkNotifiable">Laat mij weten als mijn record verbroken is!</label><br>
+									<input type="text" id="points" name="points" value=""/>
+							</div>
+							<div class="right">
+								<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
+						  </div>
+						</form>
+					{{/if}}
+				</div>
 
-				<!-- ALS JE DE TOP 5 NIET HAALT -->
-				<!--<header><h4>Je scoorde <span>102936</span> punten!</h4></header>
-				<a href="start.html" id="btnAgain"><span>speel nog eens!</span></a>-->
+				<div id="noTop5" class="display-none">
+					<!-- ALS JE DE TOP 5 NIET HAALT -->
+					<header><h4>Je scoorde <span class="gainedPoints">102936</span> punten!</h4></header>
+					<a href="start.html" id="btnagain"><span>speel nog eens!</span></a>
+				</div>
+
 			</section>
 		</section>
 
