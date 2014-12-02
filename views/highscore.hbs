@@ -16,11 +16,13 @@
 	<section class="stats">
 		<header><h2 id="highscore"><span>Highscore</span></h2></header>
 		<ol>
-			<li>Annelies Clauwaert<span>102939 punten</span></li>
-			<li>Zo&euml; Van kuyk<span>102938 punten</span></li>
+			{{#each highscore}}
+				<li>{{this.username}}<span>{{this.points}} punten</span></li>
+			{{/each}}
+			<!--<li>Zo&euml; Van kuyk<span>102938 punten</span></li>
 			<li class="place">jouw naam<span>102937 punten</span></li>
 			<li>Maarten Verleye<span>102936 punten</span></li>
-			<li>Trudy Vogels<span>102935 punten</span></li>
+			<li>Trudy Vogels<span>102935 punten</span></li>-->
 		</ol>
 		<section class="feedback">
 			<!-- ALS JE DE TOP 5 HAALT -->
@@ -28,8 +30,9 @@
 			<form method="post" action="#" id="form">
 				<div class="left">
 					<label for="txtName">naam</label><br/>
-					<input type="text"  id="txtName" name="txtName" value="" placeholder="Vul je naam in"/><br/>
-					<input type="checkbox" name="option3" value="Cheese">Laat mij weten als mijn record verbroken is!<br>
+					<input type="text" id="points" name="points" value="122"/>
+					<input type="text"  id="txtName" name="username" value="" placeholder="Vul je naam in"/><br/>
+					<input type="checkbox" id="chkNotifiable" name="notifiable">Laat mij weten als mijn record verbroken is!<br>
 				</div>
 				<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
 			</form>

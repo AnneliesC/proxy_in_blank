@@ -1,6 +1,6 @@
 // api routes
 
-module.exports = function(app, models){
+module.exports = function(app, auth, models){
 
 	var base_path = "/api";
 

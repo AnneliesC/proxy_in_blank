@@ -10,8 +10,8 @@ module.exports = function(app, auth){
 		res.render("game",{title: "Game", bodyClass:"gamestarted"});
 	});
 
-	app.get("/highscore", function(req,res){
+	/*app.get("/highscore", function(req,res){
 		res.render("highscore",{title: "Highscore", bodyClass:"gamestarted"});
-	});
+	});*/
 
 };
