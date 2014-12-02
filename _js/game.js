@@ -8,8 +8,9 @@ var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
 
-//var spaceship = document.getElementById("rocket");
+var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
+var btnAgain = document.getElementById("btnagain");
 var lblScore = document.getElementById("lblscore");
 var lblTime = document.getElementById("lbltime");
 var lblCountdown = document.getElementById("countdown");
@@ -20,12 +21,10 @@ var highscores = document.getElementById("highscores");
 
 var bounds,comets,lasers;
 var countdownTime = 5;
+var gamePaused = false;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
-var gamePaused;
-
-/* GAME LOGIC  */
 
 function _updateLabels(){
 	var minutes = Math.floor(time/60);
@@ -37,14 +36,22 @@ function _updateLabels(){
 	lblTime.innerHTML = minutes+":"+seconds;
 }
 
+function _timer(){
+	time = time + 1;
+	score = score + 2;
+	_updateLabels();
+}
+
 function _createComet(){
   var comet = new Comet(Util.randomStartPointTop(bounds));
   comet.target = {x:comet.position.x,y:window.innerHeight+comet.radius*2};
 	comet.move = true;
+
 	bean.on(comet,"done",function(){
 		svg.removeChild(comet.element);
 		comets.splice(comets.indexOf(comet),1);
 	});
+
 	svg.appendChild(comet.element);
 	comets.push(comet);
 
@@ -58,10 +65,12 @@ function _createLaser(){
 	var laser = new Laser({x:Headtracker.getSpaceshipPosition(),y:window.innerHeight-210},comets);
 	laser.target = {x:laser.position.x,y:50};
 	laser.move = true;
+
 	bean.on(laser,"top",function(){
 		svg.removeChild(laser.element);
 		lasers.splice(lasers.indexOf(laser),1);
 	});
+
 	bean.on(laser,"hit",function(){
 		svg.removeChild(laser.hit.element);
 		comets.splice(comets.indexOf(laser.hit),1);
@@ -70,34 +79,9 @@ function _createLaser(){
 		score = score + 5;
 		_updateLabels();
 	});
+
 	svg.appendChild(laser.element);
 	lasers.push(laser);
-}
-
-function _resetGameSettings(){
-	comets = [];
-	lasers = [];
-	score = 0;
-	time = 0;
-	lblScore.innerHTML = "0";
-	lblTime.innerHTML = "00:00";
-}
-
-function _timer(){
-	time = time + 1;
-	score = score + 2;
-	_updateLabels();
-}
-
-function _checkCollision(){
-	var xPos = Headtracker.getSpaceshipPosition();
-
-	for(var i=0; i<comets.length;i++){
-		var comet = comets[i];
-		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
-			console.log("DOOD");
-		}
-	}
 }
 
 /* TIMERS */
@@ -113,10 +97,6 @@ function _showHighscores(){
 	highscores.setAttribute("class","show");
 }
 
-function _hideHighscores(){
-	highscores.setAttribute("class","");
-}
-
 function _pauseGame(){
 	Headtracker.stopHeadtracking();
 	clearInterval(timerInterval);
@@ -125,7 +105,6 @@ function _pauseGame(){
 	for(var i=0;i<comets.length;i++){
 		comets[i].move = false;
 	}
-	_showHighscores();
 }
 
 function _resumeGame(){
@@ -135,10 +114,34 @@ function _resumeGame(){
 	for(var i=0;i<comets.length;i++){
 		comets[i].move = true;
 	}
-	_hideHighscores();
 }
 
-/* CLICKHANDLERS */
+/* GAME LOGIC  */
+
+function _resetGameSettings(){
+	comets = [];
+	lasers = [];
+	score = 0;
+	time = 0;
+	lblScore.innerHTML = "0";
+	lblTime.innerHTML = "00:00";
+}
+
+function _checkCollision(){
+	var xPos = Headtracker.getSpaceshipPosition();
+
+	for(var i=0; i<comets.length;i++){
+		var comet = comets[i];
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+			_pauseGame();
+			gamePaused = true;
+			document.getElementById("points").setAttribute("value",score);
+			_showHighscores();
+		}
+	}
+}
+
+/* COUNTDOWN - START GAME */
 
 function _btnInfoClickHandler(event){
 	event.preventDefault();
@@ -149,8 +152,6 @@ function _btnInfoClickHandler(event){
 	}
 	gamePaused = !gamePaused;
 }
-
-/* COUNTDOWN - START GAME */
 
 function _startGame(){
 	console.log("[App] init game settings");
@@ -176,6 +177,18 @@ function _startCountDown(){
 	countdownInterval = setInterval(_countdown, 1000);
 }
 
+/* CLICKHANDLERS */
+
+function _btnBackClickHandler(event){
+	event.preventDefault();
+	window.location = "./";
+}
+
+function _btnAgainClickHandler(event){
+	event.preventDefault();
+	window.location = "./game";
+}
+
 /* AUDIO VIDEO STREAM  */
 
 function _getUserMedia(){
@@ -198,7 +211,7 @@ function _initStream(stream){
 	headtracker = new Headtracker(stream,"game");
 	Headtracker.startHeadtracking();
 	bean.on(headtracker,"moved",_checkCollision);
-	_startCountDown();
+	if(highscores.getAttribute("class") !== "show"){ _startCountDown(); }
 }
 
 /* INIT */
@@ -217,6 +230,8 @@ function _init(){
 	}else{
 		console.log("[Game] fallback");
 	}
+	btnAgain.addEventListener("click", _btnAgainClickHandler);
+	btnBack.addEventListener("click", _btnBackClickHandler);
 }
 
 _init();

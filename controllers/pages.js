@@ -16,6 +16,40 @@ module.exports = function(app, util, User){
 		});
 	});
 
+	app.post("/game", function(req,res){
+		var post = req.body;
+		var errors = util.validate(post);
+
+		if(util.isEmpty(errors)){
+		console.log("[Server] No errors");
+			var user = new User(post);
+			user.save(function(err){
+				if(err){
+					var error = "TGAAT NIET PROBEER MORGEN NOG EENS";
+					if(err.code === 11000){
+						error = "TZIT AL NE MUTN IP UJ USERNAME";
+					}
+					console.log(err);
+					res.render("game", {error: error, title: "Game"});
+				} else {
+					User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
+						res.render("game",{title: "Game", bodyClass:"gamestarted", highscore: highscore, highscoresend: true });
+					});
+				}
+			});
+		}else{
+
+			console.log("[Server] Errors");
+			User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
+				res.render("game",{title: "Game", bodyClass:"gamestarted", highscore: highscore,
+				error: "Please fill in all fields",
+				post: post,
+				errors: errors
+				});
+			});
+		}
+	});
+
 	app.get("/highscore", function(req,res){
 		console.log("[Server] Get highscores");
 		User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){

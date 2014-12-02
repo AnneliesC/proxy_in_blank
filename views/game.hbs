@@ -42,7 +42,7 @@
 
 </article>
 
-<article id="highscores" class="">
+<article id="highscores" class="{{#if highscoresend}}show{{/if}}">
 
 		<section class="stats">
 			<header><h2><span>Highscore</span></h2></header>
@@ -70,7 +70,7 @@
 							{{#if errors.username}}</div>{{/if}}
 							<input type="checkbox" id="chkNotifiable" name="notifiable">
 							<label for="chkNotifiable">Laat mij weten als mijn record verbroken is!</label><br>
-								<input type="text" id="points" name="points" value="{{#if post.points}}{{post.points}}{{else}}345{{/if}}"/>
+								<input type="text" id="points" name="points" value=""/>
 						</div>
 						<div class="right">
 							<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
