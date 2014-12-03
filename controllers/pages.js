@@ -70,10 +70,6 @@ module.exports = function(app, util, User){
 			user.save(function(err){
 				if(err){
 					var error = "TGAAT NIET PROBEER MORGEN NOG EENS";
-					if(err.code === 11000){
-						error = "TZIT AL NE MUTN IP UJ USERNAME";
-					}
-					console.log(err);
 					res.render("highscore", {error: error, title: "highscore"});
 				} else {
 					User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){

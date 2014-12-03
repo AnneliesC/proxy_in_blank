@@ -170,7 +170,7 @@ function _checkCollision(){
 
 	for(var i=0; i<comets.length;i++){
 		var comet = comets[i];
-		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y > spaceship.offsetTop){
+		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y - comet.radius > spaceship.offsetTop){
 			_gameOver();
 		}
 	}
@@ -214,7 +214,7 @@ function _startCountDown(){
 /* CLICKHANDLERS */
 
 function _btnSendClickHandler(event){
-	event.preventDefault();
+	//event.preventDefault();
 }
 
 function _btnBackClickHandler(event){
