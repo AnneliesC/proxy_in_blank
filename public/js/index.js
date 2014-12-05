@@ -1,15 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./_js/index.js":[function(require,module,exports){
 /* jshint newcap: false */
-/* globals Notification:true*/
 
 require("./modules/util/Polyfill");
 
 var Headtracker = require("./modules/video/Headtracker");
+var Notif = require("./modules/notifications/Notif");
 
 var headtracker;
 var btnStart = document.getElementById("btnstart");
-var server = "http://localhost:3000";
-var socket;
 
 /* CLICKHANDLERS */
 
@@ -38,26 +36,6 @@ function _initStream(stream){
 	btnStart.addEventListener("click", _btnStartClickHandler);
 }
 
-/* SOCKET IO & NOTIFICATIONS*/
-
-function _initNotification(){
-	Notification.requestPermission(function (status) {
-		if (Notification.permission !== status) {
-			Notification.permission = status;
-		}
-		if (Notification.permission === 'granted') {
-			console.log("[Notification] granted");
-		} else {
-			console.log("[Notification] not granted");
-		}
-	});
-}
-
-function _initSocket(){
-	socket = io(server);
-	socket.on('registrated', _registrated);
-}
-
 /* INIT */
 
 function init(){
@@ -67,12 +45,59 @@ function init(){
 	}else{
 		console.log("[Index] fallback");
 	}
-	_initSocket();
+	//_initSocket();
 }
 
 init();
 
-},{"./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
+},{"./modules/notifications/Notif":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js":[function(require,module,exports){
+var socket;
+var server = "http://localhost:3000";
+
+function _initNotification(){
+	console.log("[Notification] init notification");
+	Notification.requestPermission(function (status) {
+		if (Notification.permission !== status) {
+			Notification.permission = status;
+		}
+		if (Notification.permission === 'granted') {
+			console.log("granted");
+
+		} else {
+			console.log("not granted");
+		}
+	});
+}
+
+function _message(tekst){
+	console.log("[Notification] notification: ", tekst);
+
+	_initNotification();
+	var ms = 4000;
+
+	var n = new Notification("Nieuwe top 5!", {
+		body: tekst + ' staat nu in de top 5!',
+		icon: 'images/2.png'
+	});
+	n.onshow = function (){
+		setTimeout(n.close.bind(n), ms);
+	};
+}
+
+function _initSocket(){
+	socket = io(server);
+	socket.on('message', _message);
+}
+
+module.exports = (function(){
+	console.log("[Notification]");
+	socket = socket;
+	_initSocket();
+	_initNotification();
+})();
+
+
+},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
 module.exports = (function(){
 	window.requestAnimFrame = require('./RequestAnimationFrame');
 	window.requestAudio = require('./RequestAudio');

@@ -27,6 +27,8 @@
 		"requestAnimFrame": true,
 		"headtrackr": true,
 		"AudioContext": true,
+		"Notification": true,
+		"Notif": true,
 		"Polymer": true
 	}
 }

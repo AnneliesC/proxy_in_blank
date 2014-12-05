@@ -8,12 +8,11 @@ var Comet = require("./modules/gameElements/Comet");
 var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
+var Notif = require("./modules/notifications/Notif");
 
 var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
 var btnAgain = document.getElementById("btnagain");
-var btnSend = document.getElementById("btnSend");
-var chkNotifiable = document.getElementById("chkNotifiable");
 
 var lblScore = document.getElementById("lblscore");
 var lblTime = document.getElementById("lbltime");
@@ -29,8 +28,6 @@ var gamePaused = false;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
-var server = "http://localhost:3000";
-var socket;
 
 /* API */
 
@@ -150,7 +147,7 @@ function _resetGameSettings(){
 function _gameOver(){
 	var users = $.parseJSON(_httpGet("./api/users"));
 
-score = 60;
+score = 80;
 	var usersWithHigherScores = _.filter(users, function(user){
 		return user.points >= score;
 	});
@@ -218,10 +215,6 @@ function _startCountDown(){
 
 /* CLICKHANDLERS */
 
-function _btnSendClickHandler(event){
-	//this.socket.emit("top5");
-}
-
 function _btnBackClickHandler(event){
 	event.preventDefault();
 	window.location = "./";
@@ -230,77 +223,6 @@ function _btnBackClickHandler(event){
 function _btnAgainClickHandler(event){
 	event.preventDefault();
 	window.location = "./game";
-}
-
-function _chkNotifiableClickHandler(event){
-	if (!event.srcElement.checked){
-		return;
-	}
-	Notification.requestPermission(function (status) {
-			if (Notification.permission !== status) {
-				Notification.permission = status;
-			}
-			if (Notification.permission === 'granted') {
-				console.log("granted");
-			} else {
-				console.log("not granted");
-				event.srcElement.checked = false;
-			}
-		});
-}
-
-/* SOCKET IO & NOTIFICATIONS*/
-
-function _initNotification(){
-	Notification.requestPermission(function (status) {
-		if (Notification.permission !== status) {
-			Notification.permission = status;
-		}
-		if (Notification.permission === 'granted') {
-			console.log("granted");
-
-		} else {
-			console.log("not granted");
-		}
-	});
-}
-
-function _registrated(tekst){
-	console.log("notification: ", tekst);
-
-	_initNotification();
-	//vanaf hier moet je eigenlijk luisteren of er een notificatie komt
-	var ms = 4000;
-
-	var n = new Notification(tekst, {
-		body: 'From: Annelies',
-		icon: 'images/1.png'
-	});
-	n.onshow = function (){
-		setTimeout(n.close.bind(n), ms);
-	};
-}
-
-function _message(tekst){
-	console.log("notification: ", tekst);
-
-	_initNotification();
-	//vanaf hier moet je eigenlijk luisteren of er een notificatie komt
-	var ms = 4000;
-
-	var n = new Notification("Nieuwe top 5!", {
-		body: tekst + ' staat nu in de top 5!',
-		icon: 'images/2.png'
-	});
-	n.onshow = function (){
-		setTimeout(n.close.bind(n), ms);
-	};
-}
-
-function _initSocket(){
-	socket = io(server);
-	socket.on('registrated', _registrated);
-	socket.on('message', _message);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -344,11 +266,9 @@ function _init(){
 	}else{
 		console.log("[Game] fallback");
 	}
+
 	btnAgain.addEventListener("click", _btnAgainClickHandler);
 	btnBack.addEventListener("click", _btnBackClickHandler);
-	btnSend.addEventListener("click", _btnSendClickHandler);
-	chkNotifiable.addEventListener("click", _chkNotifiableClickHandler);
-	_initSocket();
 }
 
 _init();

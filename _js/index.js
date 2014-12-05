@@ -1,14 +1,12 @@
 /* jshint newcap: false */
-/* globals Notification:true*/
 
 require("./modules/util/Polyfill");
 
 var Headtracker = require("./modules/video/Headtracker");
+var Notif = require("./modules/notifications/Notif");
 
 var headtracker;
 var btnStart = document.getElementById("btnstart");
-var server = "http://localhost:3000";
-var socket;
 
 /* CLICKHANDLERS */
 
@@ -37,26 +35,6 @@ function _initStream(stream){
 	btnStart.addEventListener("click", _btnStartClickHandler);
 }
 
-/* SOCKET IO & NOTIFICATIONS*/
-
-function _initNotification(){
-	Notification.requestPermission(function (status) {
-		if (Notification.permission !== status) {
-			Notification.permission = status;
-		}
-		if (Notification.permission === 'granted') {
-			console.log("[Notification] granted");
-		} else {
-			console.log("[Notification] not granted");
-		}
-	});
-}
-
-function _initSocket(){
-	socket = io(server);
-	socket.on('registrated', _registrated);
-}
-
 /* INIT */
 
 function init(){
@@ -66,7 +44,7 @@ function init(){
 	}else{
 		console.log("[Index] fallback");
 	}
-	_initSocket();
+	//_initSocket();
 }
 
 init();
