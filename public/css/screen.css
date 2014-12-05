@@ -50,7 +50,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
@@ -61,7 +61,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
   font-family: 'reckless';
   src: url("../fonts/reckless/reckless-webfont.eot");
@@ -69,13 +68,21 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-weight: normal;
   font-style: normal;
 }
-
 body {
   font-size: 62.5%;
   font-family: quicksand;
   background-color: #21222b;
   background-image: url("../images/bg1.png"), url("../images/bg2.png");
   color: #fff;
+}
+
+#container {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  overflow: hidden;
 }
 
 .gamestarted {
@@ -87,7 +94,6 @@ body {
   from {
     background-position: 0 0, 0 0;
   }
-
   to {
     background-position: 0 602px, 0 425px;
   }
@@ -97,12 +103,10 @@ body {
   from {
     background-position: 0 0, 0 0;
   }
-
   to {
     background-position: 0 602px, 0 425px;
   }
 }
-
 video {
   margin: 10px auto 0;
   -webkit-transform: scaleX(-1);
@@ -148,7 +152,6 @@ header .gametitle {
     top: 10px;
     left: 514px;
   }
-
   to {
     top: -50px;
     left: -70px;
@@ -158,7 +161,6 @@ header .gametitle {
     -o-transform: scale(0.4, 0.4);
   }
 }
-
 @-webkit-keyframes slide {
   from {
     top: 10px;
@@ -168,7 +170,6 @@ header .gametitle {
     -moz-transform: scale(1, 1);
     -o-transform: scale(1, 1);
   }
-
   to {
     top: -50px;
     left: -70px;
@@ -178,7 +179,6 @@ header .gametitle {
     -o-transform: scale(0.4, 0.4);
   }
 }
-
 #start {
   width: 1100px;
   margin: 120px auto 0;
@@ -378,42 +378,34 @@ header .gametitle {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerLeft {
   from {
     background: url("../images/btn_left.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_left_hover.png") no-repeat;
   }
 }
-
 @keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerRight {
   from {
     background: url("../images/btn_right.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_right_hover.png") no-repeat;
   }
 }
-
 #game {
   width: 100%;
   height: 100%;
@@ -717,62 +709,50 @@ ol li:before {
   from {
     margin-top: -100px;
   }
-
   to {
     margin-top: 0;
   }
 }
-
 @-webkit-keyframes slideDown {
   from {
     margin-top: -100px;
   }
-
   to {
     margin-top: 0;
   }
 }
-
 @keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerBack {
   from {
     background: url("../images/btn_back.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_back_hover.png") no-repeat;
   }
 }
-
 @keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
-
 @-webkit-keyframes darkerInfo {
   from {
     background: url("../images/btn_info.png") no-repeat;
   }
-
   to {
     background: url("../images/btn_info_hover.png") no-repeat;
   }
 }
-
 .left {
   float: left;
 }

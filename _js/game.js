@@ -8,6 +8,7 @@ var Comet = require("./modules/gameElements/Comet");
 var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
+var LaserSound = require("./modules/audio/LaserSound");
 var Notif = require("./modules/notifications/Notif");
 
 var btnBack = document.getElementById("btnback");
@@ -96,6 +97,7 @@ function _createLaser(){
 	});
 
 	svg.appendChild(laser.element);
+	LaserSound.playLaserSound();
 	lasers.push(laser);
 }
 
@@ -146,8 +148,6 @@ function _resetGameSettings(){
 
 function _gameOver(){
 	var users = $.parseJSON(_httpGet("./api/users"));
-
-score = 80;
 	var usersWithHigherScores = _.filter(users, function(user){
 		return user.points >= score;
 	});
@@ -259,6 +259,8 @@ function _init(){
 		height: window.innerHeight,
 		border: 10
 	};
+
+	//var laserSound = new LaserSound();
 
 	_getUserMedia();
 	if (navigator.getUserMedia) {

@@ -9,6 +9,7 @@ var Comet = require("./modules/gameElements/Comet");
 var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
+var LaserSound = require("./modules/audio/LaserSound");
 var Notif = require("./modules/notifications/Notif");
 
 var btnBack = document.getElementById("btnback");
@@ -97,6 +98,7 @@ function _createLaser(){
 	});
 
 	svg.appendChild(laser.element);
+	LaserSound.playLaserSound();
 	lasers.push(laser);
 }
 
@@ -261,6 +263,8 @@ function _init(){
 		border: 10
 	};
 
+	//var laserSound = new LaserSound();
+
 	_getUserMedia();
 	if (navigator.getUserMedia) {
 		navigator.getUserMedia({audio: true, video: true}, _initStream, _userErrorHandler);
@@ -274,7 +278,7 @@ function _init(){
 
 _init();
 
-},{"./modules/audio/DetectClapping":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/notifications/Notif":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
+},{"./modules/audio/DetectClapping":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/audio/LaserSound":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/LaserSound.js","./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/notifications/Notif":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
 
 var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
 var sampleSize = 1024;
@@ -334,7 +338,19 @@ function DetectClapping(stream){
 
 module.exports = DetectClapping;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/LaserSound.js":[function(require,module,exports){
+function LaserSound(stream){
+	console.log("[LaserSound]");
+}
+
+LaserSound.playLaserSound = function(){
+	var sound = $('audio')[0];
+	sound.play();
+};
+
+module.exports = LaserSound;
+
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -379,7 +395,7 @@ function Comet(position){
 
 module.exports = Comet;
 
-},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -428,7 +444,7 @@ function Laser(position,comets){
 
 module.exports = Laser;
 
-},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js":[function(require,module,exports){
 var socket;
 var server = "http://localhost:3000";
 
@@ -475,7 +491,7 @@ module.exports = (function(){
 })();
 
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
 var namespace = "http://www.w3.org/2000/svg";
 
 function SVGHelper(){
@@ -488,23 +504,23 @@ SVGHelper.createElement = function(el){
 
 module.exports = SVGHelper;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
 module.exports = (function(){
 	window.requestAnimFrame = require('./RequestAnimationFrame');
 	window.requestAudio = require('./RequestAudio');
 })();
 
-},{"./RequestAnimationFrame":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
+},{"./RequestAnimationFrame":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
 module.exports = (function(){
 	return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element){window.setTimeout(callback, 1000 / 60); };
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
 module.exports = (function(){
   return  window.AudioContext || window.webkitAudioContext  || window.mozAudioContext;
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
@@ -551,7 +567,7 @@ Util.map = function( value, min1, max1, min2, max2 )
 
 module.exports = Util;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
 var Util = require("../util/Util");
 
 var htracker,page;
@@ -644,4 +660,4 @@ Headtracker.stopHeadtracking = function(){
 
 module.exports = Headtracker;
 
-},{"../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);
+},{"../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);

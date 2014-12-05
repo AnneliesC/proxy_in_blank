@@ -50,7 +50,7 @@ function init(){
 
 init();
 
-},{"./modules/notifications/Notif":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/notifications/Notif.js":[function(require,module,exports){
+},{"./modules/notifications/Notif":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js":[function(require,module,exports){
 var socket;
 var server = "http://localhost:3000";
 
@@ -97,23 +97,23 @@ module.exports = (function(){
 })();
 
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
 module.exports = (function(){
 	window.requestAnimFrame = require('./RequestAnimationFrame');
 	window.requestAudio = require('./RequestAudio');
 })();
 
-},{"./RequestAnimationFrame":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
+},{"./RequestAnimationFrame":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
 module.exports = (function(){
 	return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element){window.setTimeout(callback, 1000 / 60); };
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
 module.exports = (function(){
   return  window.AudioContext || window.webkitAudioContext  || window.mozAudioContext;
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
@@ -160,7 +160,7 @@ Util.map = function( value, min1, max1, min2, max2 )
 
 module.exports = Util;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
 var Util = require("../util/Util");
 
 var htracker,page;
@@ -253,4 +253,4 @@ Headtracker.stopHeadtracking = function(){
 
 module.exports = Headtracker;
 
-},{"../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK4/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/index.js"]);
+},{"../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/index.js"]);

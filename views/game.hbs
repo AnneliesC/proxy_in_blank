@@ -9,81 +9,86 @@
     </div>
 </header>
 
-<article id="game">
-    <header><h2><span>The game</span></h2></header>
+<div id="container">
+	<article id="game">
+	    <header><h2><span>The game</span></h2></header>
 
-    <div class="webcam">
-			<div><video id="webcamPreview" autoplay loop width="210" height="160" style="width: 210px"></video></div>
-    </div>
-    <div id="countdown"></div>
-    <div id="tips">"klap in je handen om de laser af te vuren"</div>
-    <section id="scoreboard">
-        <div class="scoreinfo">
-            <header><h2><span>scoreboard</span></h2></header>
-            <div id="score" class="left">
-                <p>Score<br/><span id="lblscore">0</span></p>
-            </div>
-            <div id="time" class="right">
-                <p>Tijd<br/><span id="lbltime">00:00</span></p>
-            </div>
-        </div>
-        <a href="./" id="btnback" class="left"><span>btnBack</span></a>
-        <a href="#" id="btninfo" class="right"><span>btnInfo</span></a>
-    </section>
+	    <audio autoplay="autoplay">
+		    <source src="sound/laser.mp3" type="audio/mp3" />
+		    <source src="sound/laser.ogg" type="audio/ogg" />
+			</audio>
 
-    <svg xmlns="http://www.w3.org/2000/svg"
-		 	 xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
-		 	 width="100%" height="100%" viewport="0 0 100% 100%">
-			<title></title>
-			<desc></desc>
-		</svg>
+	    <div class="webcam">
+				<div><video id="webcamPreview" autoplay loop muted="muted" width="210" height="160" style="width: 210px"></video></div>
+	    </div>
+	    <div id="countdown"></div>
+	    <div id="tips">"klap in je handen om de laser af te vuren"</div>
+	    <section id="scoreboard">
+	        <div class="scoreinfo">
+	            <header><h2><span>scoreboard</span></h2></header>
+	            <div id="score" class="left">
+	                <p>Score<br/><span id="lblscore">0</span></p>
+	            </div>
+	            <div id="time" class="right">
+	                <p>Tijd<br/><span id="lbltime">00:00</span></p>
+	            </div>
+	        </div>
+	        <a href="./" id="btnback" class="left"><span>btnBack</span></a>
+	        <a href="#" id="btninfo" class="right"><span>btnInfo</span></a>
+	    </section>
 
-		<figure id="rocket"><img src="images/rocket1.png" alt="rocket"></figure>
+	    <svg xmlns="http://www.w3.org/2000/svg"
+			 	 xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+			 	 width="100%" height="100%" viewport="0 0 100% 100%">
+				<title></title>
+				<desc></desc>
+			</svg>
 
-</article>
+			<figure id="rocket"><img src="images/rocket1.png" alt="rocket"></figure>
 
-<article id="highscores" class="{{#if highscoresend}}show{{/if}}">
+	</article>
 
-		<section class="stats">
-			<header><h2><span>Highscore</span></h2></header>
-			<ol>
-				{{#each highscore}}
-					<li>{{this.username}}<span>{{this.points}} punten</span></li>
-				{{/each}}
-			</ol>
-			<section class="feedback">
-				<div id="top5">
-					{{#if highscoresend}}
-						<header><h4>Je highscore is verzonden!</header>
-						<a href="#" id="btnagain"><span>speel nog eens!</span></a>
-					{{else}}
-						<header><h4>Je haalde de top 5 met <span class="gainedPoints">102936</span> punten!</h4></header>
-						<form method="post" action="#" id="form">
-							<div class="left">
-								{{#if errors.username}}<div class="error">{{/if}}
-										<label for="txtName" class="display-none">naam</label><br/>
-										<input type="text"  id="txtName" name="username" value="{{post.username}}" placeholder="Vul je naam in"/><br/>
-								{{#if errors.username}}</div>{{/if}}
-								<input type="checkbox" id="chkNotifiable" name="notifiable">
-								<label for="chkNotifiable">Laat mij weten als mijn record verbroken is!</label><br>
-									<input type="text" id="points" name="points" value=""/>
-							</div>
-							<div class="right">
-								<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
-						  </div>
-						</form>
-					{{/if}}
-				</div>
+	<article id="highscores" class="{{#if highscoresend}}show{{/if}}">
 
-				<div id="noTop5" class="display-none">
-					<header><h4>Je scoorde <span class="gainedPoints">102936</span> punten!</h4></header>
-					<a href="start.html" id="btnagain"><span>speel nog eens!</span></a>
-				</div>
+			<section class="stats">
+				<header><h2><span>Highscore</span></h2></header>
+				<ol>
+					{{#each highscore}}
+						<li>{{this.username}}<span>{{this.points}} punten</span></li>
+					{{/each}}
+				</ol>
+				<section class="feedback">
+					<div id="top5">
+						{{#if highscoresend}}
+							<header><h4>Je highscore is verzonden!</header>
+							<a href="#" id="btnagain"><span>speel nog eens!</span></a>
+						{{else}}
+							<header><h4>Je haalde de top 5 met <span class="gainedPoints">102936</span> punten!</h4></header>
+							<form method="post" action="#" id="form">
+								<div class="left">
+									{{#if errors.username}}<div class="error">{{/if}}
+											<label for="txtName" class="display-none">naam</label><br/>
+											<input type="text"  id="txtName" name="username" value="{{post.username}}" placeholder="Vul je naam in"/><br/>
+									{{#if errors.username}}</div>{{/if}}
+										<input type="text" id="points" name="points" value=""/>
+								</div>
+								<div class="right">
+									<input type="submit" name="btnSend" id="btnSend" class="right" value="verstuur >" />
+							  </div>
+							</form>
+						{{/if}}
+					</div>
 
+					<div id="noTop5" class="display-none">
+						<header><h4>Je scoorde <span class="gainedPoints">102936</span> punten!</h4></header>
+						<a href="start.html" id="btnagain"><span>speel nog eens!</span></a>
+					</div>
+
+				</section>
 			</section>
-		</section>
 
-</article>
+	</article>
+</div>
 
 <footer>&nbsp;</footer>
 
