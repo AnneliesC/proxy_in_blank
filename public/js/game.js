@@ -1,5 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./_js/game.js":[function(require,module,exports){
 /* jshint newcap: false */
+/* globals Notification:true*/
 
 require("./modules/util/Polyfill");
 
@@ -13,6 +14,7 @@ var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
 var btnAgain = document.getElementById("btnagain");
 var btnSend = document.getElementById("btnSend");
+var chkNotifiable = document.getElementById("chkNotifiable");
 
 var lblScore = document.getElementById("lblscore");
 var lblTime = document.getElementById("lbltime");
@@ -28,6 +30,8 @@ var gamePaused = false;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
+var server = "http://localhost:3000";
+var socket;
 
 /* API */
 
@@ -215,7 +219,7 @@ function _startCountDown(){
 /* CLICKHANDLERS */
 
 function _btnSendClickHandler(event){
-	//event.preventDefault();
+	//this.socket.emit("top5");
 }
 
 function _btnBackClickHandler(event){
@@ -226,6 +230,77 @@ function _btnBackClickHandler(event){
 function _btnAgainClickHandler(event){
 	event.preventDefault();
 	window.location = "./game";
+}
+
+function _chkNotifiableClickHandler(event){
+	if (!event.srcElement.checked){
+		return;
+	}
+	Notification.requestPermission(function (status) {
+			if (Notification.permission !== status) {
+				Notification.permission = status;
+			}
+			if (Notification.permission === 'granted') {
+				console.log("granted");
+			} else {
+				console.log("not granted");
+				event.srcElement.checked = false;
+			}
+		});
+}
+
+/* SOCKET IO & NOTIFICATIONS*/
+
+function _initNotification(){
+	Notification.requestPermission(function (status) {
+		if (Notification.permission !== status) {
+			Notification.permission = status;
+		}
+		if (Notification.permission === 'granted') {
+			console.log("granted");
+
+		} else {
+			console.log("not granted");
+		}
+	});
+}
+
+function _registrated(tekst){
+	console.log("notification: ", tekst);
+
+	_initNotification();
+	//vanaf hier moet je eigenlijk luisteren of er een notificatie komt
+	var ms = 4000;
+
+	var n = new Notification(tekst, {
+		body: 'From: Annelies',
+		icon: 'images/1.png'
+	});
+	n.onshow = function (){
+		setTimeout(n.close.bind(n), ms);
+	};
+}
+
+function _message(tekst){
+	console.log("notification: ", tekst);
+
+	_initNotification();
+	//vanaf hier moet je eigenlijk luisteren of er een notificatie komt
+	var ms = 4000;
+
+	var n = new Notification("Nieuwe top 5!", {
+		body: tekst + ' staat nu in de top 5!',
+		icon: 'images/2.png'
+	});
+	n.onshow = function (){
+		setTimeout(n.close.bind(n), ms);
+	};
+}
+
+function _initSocket(){
+	socket = io(server);
+	socket.on('registrated', _registrated);
+	socket.on('message', _message);
 }
 
 /* AUDIO VIDEO STREAM  */
@@ -272,11 +347,13 @@ function _init(){
 	btnAgain.addEventListener("click", _btnAgainClickHandler);
 	btnBack.addEventListener("click", _btnBackClickHandler);
 	btnSend.addEventListener("click", _btnSendClickHandler);
+	chkNotifiable.addEventListener("click", _chkNotifiableClickHandler);
+	_initSocket();
 }
 
 _init();
 
-},{"./modules/audio/DetectClapping":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/gameElements/Comet":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Polyfill":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
+},{"./modules/audio/DetectClapping":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
 
 var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
 var sampleSize = 1024;
@@ -336,7 +413,7 @@ function DetectClapping(stream){
 
 module.exports = DetectClapping;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -381,7 +458,7 @@ function Comet(position){
 
 module.exports = Comet;
 
-},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
 var Util = require("../util/Util");
 
@@ -430,7 +507,7 @@ function Laser(position,comets){
 
 module.exports = Laser;
 
-},{"../svg/SVGHelper":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
+},{"../svg/SVGHelper":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js","../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/svg/SVGHelper.js":[function(require,module,exports){
 var namespace = "http://www.w3.org/2000/svg";
 
 function SVGHelper(){
@@ -443,23 +520,23 @@ SVGHelper.createElement = function(el){
 
 module.exports = SVGHelper;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js":[function(require,module,exports){
 module.exports = (function(){
 	window.requestAnimFrame = require('./RequestAnimationFrame');
 	window.requestAudio = require('./RequestAudio');
 })();
 
-},{"./RequestAnimationFrame":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
+},{"./RequestAnimationFrame":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js","./RequestAudio":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAnimationFrame.js":[function(require,module,exports){
 module.exports = (function(){
 	return  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element){window.setTimeout(callback, 1000 / 60); };
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/RequestAudio.js":[function(require,module,exports){
 module.exports = (function(){
   return  window.AudioContext || window.webkitAudioContext  || window.mozAudioContext;
 })();
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js":[function(require,module,exports){
 function Util(){
 
 }
@@ -506,7 +583,7 @@ Util.map = function( value, min1, max1, min2, max2 )
 
 module.exports = Util;
 
-},{}],"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js":[function(require,module,exports){
 var Util = require("../util/Util");
 
 var htracker,page;
@@ -599,4 +676,4 @@ Headtracker.stopHeadtracking = function(){
 
 module.exports = Headtracker;
 
-},{"../util/Util":"/Users/Annelies/Documents/Howest/S5/Rich Media Development/OPDRACHTEN/PROXY_IN_BLANK3/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);
+},{"../util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js"}]},{},["./_js/game.js"]);

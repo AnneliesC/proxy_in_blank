@@ -3,6 +3,9 @@
 var express = require("express");
 var app = express();
 var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+io.on('connection', function(socket) {});
 
 //** CONFIG **//
 require("./config/middleware.js")(app, express);
@@ -14,7 +17,7 @@ require("./modules/cosmicrace.js")(server);
 var util = require("./modules/util.js");
 
 //** ROUTES **//
-require("./controllers/pages.js")(app, util, mongoose.models.User);
+require("./controllers/pages.js")(app, util, mongoose.models.User, io);
 require("./controllers/api.js")(app, mongoose.models);
 
 //var port = process.env.PORT;

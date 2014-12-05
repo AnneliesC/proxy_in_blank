@@ -1,6 +1,8 @@
 // main page
 
-module.exports = function(app, util, User){
+
+module.exports = function(app, util, User, io){
+
 
 	app.get("/", function(req,res){
 		res.render("index",{title: "Setup"});
@@ -9,9 +11,7 @@ module.exports = function(app, util, User){
 	app.get("/game", function(req,res){
 		console.log("[Server] Get highscores");
 		User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
-
 			//hier eerst nog controleren of de speler een record heeft verbroken met zijn tijd of niet.
-
 			res.render("game",{title: "Game", bodyClass:"gamestarted", highscore: highscore});
 		});
 	});
@@ -33,6 +33,7 @@ module.exports = function(app, util, User){
 					res.render("game", {error: error, title: "Game"});
 				} else {
 					User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
+						io.sockets.emit('message', user.username);
 						res.render("game",{title: "Game", bodyClass:"gamestarted", highscore: highscore, highscoresend: true });
 					});
 				}
@@ -69,7 +70,7 @@ module.exports = function(app, util, User){
 			var user = new User(post);
 			user.save(function(err){
 				if(err){
-					var error = "TGAAT NIET PROBEER MORGEN NOG EENS";
+					var error = "werkt niet";
 					res.render("highscore", {error: error, title: "highscore"});
 				} else {
 					User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
