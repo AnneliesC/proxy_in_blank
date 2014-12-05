@@ -150,6 +150,7 @@ function _resetGameSettings(){
 function _gameOver(){
 	var users = $.parseJSON(_httpGet("./api/users"));
 
+score = 60;
 	var usersWithHigherScores = _.filter(users, function(user){
 		return user.points >= score;
 	});

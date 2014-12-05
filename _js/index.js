@@ -45,28 +45,11 @@ function _initNotification(){
 			Notification.permission = status;
 		}
 		if (Notification.permission === 'granted') {
-			console.log("granted");
-
+			console.log("[Notification] granted");
 		} else {
-			console.log("not granted");
+			console.log("[Notification] not granted");
 		}
 	});
-}
-
-function _registrated(tekst){
-	console.log("notification: ", tekst);
-
-	_initNotification();
-	//vanaf hier moet je eigenlijk luisteren of er een notificatie komt
-	var ms = 4000;
-
-	var n = new Notification(tekst, {
-		body: 'From: MUFFDIVER',
-		icon: 'images/1.png'
-	});
-	n.onshow = function (){
-		setTimeout(n.close.bind(n), ms);
-	};
 }
 
 function _initSocket(){

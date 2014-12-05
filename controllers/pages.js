@@ -1,8 +1,4 @@
-// main page
-
-
 module.exports = function(app, util, User, io){
-
 
 	app.get("/", function(req,res){
 		res.render("index",{title: "Setup"});
@@ -54,9 +50,6 @@ module.exports = function(app, util, User, io){
 	app.get("/highscore", function(req,res){
 		console.log("[Server] Get highscores");
 		User.find().sort( { points: -1 } ).limit(5).exec(function(err, highscore){
-
-			//hier eerst nog controleren of de speler een record heeft verbroken met zijn tijd of niet.
-
 			res.render("highscore",{title: "Highscore", bodyClass:"gamestarted", highscore: highscore});
 		});
 	});

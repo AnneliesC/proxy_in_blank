@@ -50,13 +50,8 @@
 				{{#each highscore}}
 					<li>{{this.username}}<span>{{this.points}} punten</span></li>
 				{{/each}}
-				<!--<li>Zo&euml; Van kuyk<span>102938 punten</span></li>
-				<li class="place">jouw naam<span>102937 punten</span></li>
-				<li>Maarten Verleye<span>102936 punten</span></li>
-				<li>Trudy Vogels<span>102935 punten</span></li>-->
 			</ol>
 			<section class="feedback">
-				<!-- ALS JE DE TOP 5 HAALT -->
 				<div id="top5">
 					{{#if highscoresend}}
 						<header><h4>Je highscore is verzonden!</header>
@@ -81,7 +76,6 @@
 				</div>
 
 				<div id="noTop5" class="display-none">
-					<!-- ALS JE DE TOP 5 NIET HAALT -->
 					<header><h4>Je scoorde <span class="gainedPoints">102936</span> punten!</h4></header>
 					<a href="start.html" id="btnagain"><span>speel nog eens!</span></a>
 				</div>

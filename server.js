@@ -13,7 +13,6 @@ require("./config/handlebars.js")(app);
 var mongoose = require("./config/mongoose.js")();
 
 //** MODULES **//
-require("./modules/cosmicrace.js")(server);
 var util = require("./modules/util.js");
 
 //** ROUTES **//

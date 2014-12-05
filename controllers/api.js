@@ -1,5 +1,3 @@
-// api routes
-
 module.exports = function(app, models){
 
 	var base_path = "/api";
