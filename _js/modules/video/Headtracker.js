@@ -47,10 +47,8 @@ document.addEventListener("headtrackrStatus",function(event){
 	var messagep;
 	if (event.status in supportMessages){
       messagep = document.getElementById('gUMMessage');
-      //console.log("supportMessage",supportMessages[event.status]);
   }else if(event.status in statusMessages){
       messagep = document.getElementById('headtrackerMessage');
-      //console.log("statusMessage",statusMessages[event.status]);
   }
 },true);
 

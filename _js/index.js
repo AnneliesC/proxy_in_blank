@@ -3,7 +3,7 @@
 require("./modules/util/Polyfill");
 
 var Headtracker = require("./modules/video/Headtracker");
-var Notif = require("./modules/notifications/Notif");
+require("./modules/notifications/Notif");
 
 var headtracker;
 var btnStart = document.getElementById("btnstart");
@@ -44,7 +44,6 @@ function init(){
 	}else{
 		console.log("[Index] fallback");
 	}
-	//_initSocket();
 }
 
 init();

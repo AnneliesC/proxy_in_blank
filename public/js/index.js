@@ -4,7 +4,7 @@
 require("./modules/util/Polyfill");
 
 var Headtracker = require("./modules/video/Headtracker");
-var Notif = require("./modules/notifications/Notif");
+require("./modules/notifications/Notif");
 
 var headtracker;
 var btnStart = document.getElementById("btnstart");
@@ -45,7 +45,6 @@ function init(){
 	}else{
 		console.log("[Index] fallback");
 	}
-	//_initSocket();
 }
 
 init();
@@ -77,7 +76,7 @@ function _message(tekst){
 
 	var n = new Notification("Nieuwe top 5!", {
 		body: tekst + ' staat nu in de top 5!',
-		icon: 'images/2.png'
+		icon: 'images/notification.png'
 	});
 	n.onshow = function (){
 		setTimeout(n.close.bind(n), ms);
@@ -90,7 +89,6 @@ function _initSocket(){
 }
 
 module.exports = (function(){
-	console.log("[Notification]");
 	socket = socket;
 	_initSocket();
 	_initNotification();
@@ -210,10 +208,8 @@ document.addEventListener("headtrackrStatus",function(event){
 	var messagep;
 	if (event.status in supportMessages){
       messagep = document.getElementById('gUMMessage');
-      //console.log("supportMessage",supportMessages[event.status]);
   }else if(event.status in statusMessages){
       messagep = document.getElementById('headtrackerMessage');
-      //console.log("statusMessage",statusMessages[event.status]);
   }
 },true);
 

@@ -13,7 +13,7 @@ module.exports = {
 		var errors = {};
 
 		if(!user.username){
-			errors.username = "FILL IN A GODDAMN USERNAME";
+			errors.username = "Vul een Nickname in!";
 		}
 
 		return errors;

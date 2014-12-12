@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./_js/game.js":[function(require,module,exports){
 /* jshint newcap: false */
-/* globals Notification:true*/
+/* globals AudioContext:true*/
 
 require("./modules/util/Polyfill");
 
@@ -9,8 +9,10 @@ var Comet = require("./modules/gameElements/Comet");
 var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
-var LaserSound = require("./modules/audio/LaserSound");
-var Notif = require("./modules/notifications/Notif");
+var BufferLoader = require('./modules/audio/BufferLoader');
+var Player = require('./modules/audio/Player');
+var sets = require('./modules/audio/data_sound').sets;
+require("./modules/notifications/Notif");
 
 var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
@@ -30,6 +32,8 @@ var gamePaused = false;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
+var arrAudio;
+var player;
 
 /* API */
 
@@ -89,6 +93,7 @@ function _createLaser(){
 	});
 
 	bean.on(laser,"hit",function(){
+		player.play(arrAudio[1]);
 		svg.removeChild(laser.hit.element);
 		comets.splice(comets.indexOf(laser.hit),1);
 		svg.removeChild(laser.element);
@@ -98,7 +103,7 @@ function _createLaser(){
 	});
 
 	svg.appendChild(laser.element);
-	LaserSound.playLaserSound();
+	player.play(arrAudio[0]);
 	lasers.push(laser);
 }
 
@@ -149,17 +154,13 @@ function _resetGameSettings(){
 
 function _gameOver(){
 	var users = $.parseJSON(_httpGet("./api/users"));
-
-score = 80;
 	var usersWithHigherScores = _.filter(users, function(user){
 		return user.points >= score;
 	});
 
 	if(usersWithHigherScores.length <= 4){
-		console.log("top5");
 		document.getElementById("noTop5").setAttribute("class","display-none");
 	}else{
-		console.log("geen top5,loser");
 		document.getElementById("top5").setAttribute("class","display-none");
 		document.getElementById("noTop5").setAttribute("class","");
 	}
@@ -177,6 +178,7 @@ function _checkCollision(){
 		var comet = comets[i];
 		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y - comet.radius > spaceship.offsetTop){
 			_gameOver();
+			player.play(arrAudio[1]);
 		}
 	}
 }
@@ -253,6 +255,11 @@ function _initStream(stream){
 	if(highscores.getAttribute("class") !== "show"){ _startCountDown(); }
 }
 
+function _soundsLoaded(arr){
+	console.log("[SOUNDS] sounds loaded");
+	arrAudio = arr;
+}
+
 /* INIT */
 
 function _init(){
@@ -263,8 +270,6 @@ function _init(){
 		border: 10
 	};
 
-	//var laserSound = new LaserSound();
-
 	_getUserMedia();
 	if (navigator.getUserMedia) {
 		navigator.getUserMedia({audio: true, video: true}, _initStream, _userErrorHandler);
@@ -272,13 +277,73 @@ function _init(){
 		console.log("[Game] fallback");
 	}
 
+	//gamesound
+	var context = new AudioContext();
+	player = new Player(context);
+
+	var loader = new BufferLoader(context, sets, _soundsLoaded);
+	loader.load();
+
 	btnAgain.addEventListener("click", _btnAgainClickHandler);
 	btnBack.addEventListener("click", _btnBackClickHandler);
 }
 
 _init();
 
-},{"./modules/audio/DetectClapping":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/audio/LaserSound":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/LaserSound.js","./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/notifications/Notif":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
+},{"./modules/audio/BufferLoader":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/BufferLoader.js","./modules/audio/DetectClapping":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js","./modules/audio/Player":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/Player.js","./modules/audio/data_sound":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/data_sound.json","./modules/gameElements/Comet":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js","./modules/gameElements/Laser":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Laser.js","./modules/notifications/Notif":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/notifications/Notif.js","./modules/util/Polyfill":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Polyfill.js","./modules/util/Util":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/util/Util.js","./modules/video/Headtracker":"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/video/Headtracker.js"}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/BufferLoader.js":[function(require,module,exports){
+function BufferLoader(context, url, callback) {
+	this.context = context;
+	this.urlList = url;
+	this.onload = callback;
+	this.bufferList = [];
+	this.loadCount = 0;
+}
+
+BufferLoader.prototype.loadBuffer = function(url) {
+	var request = new XMLHttpRequest();
+	request.open("GET", url, true);
+	request.responseType = "arraybuffer";
+
+	console.log(url);
+
+	var loader = this;
+
+	request.onload = function() {
+		// Asynchronously decode the audio file data in request.response
+		loader.context.decodeAudioData(
+			request.response,
+			function(buffer) {
+				if (!buffer) {
+					console.error('error decoding file data: ' + url);
+					return;
+				}
+				loader.bufferList.push(buffer);
+				if(++loader.loadCount === loader.urlList.length){
+					loader.onload(loader.bufferList);
+				}
+			},
+			function(error) {
+				console.error('decodeAudioData error', error);
+			}
+		);
+	};
+
+	request.onerror = function() {
+		console.error('BufferLoader: XHR error');
+	};
+
+	request.send();
+};
+
+BufferLoader.prototype.load = function() {
+	for (var i = 0; i < this.urlList.length; ++i){
+		this.loadBuffer(this.urlList[i].file);
+	}
+};
+
+module.exports = BufferLoader;
+
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/DetectClapping.js":[function(require,module,exports){
 
 var audioContext,analyserNode,javascriptNode,amplitudeArray,audioStream,currentValue;
 var sampleSize = 1024;
@@ -338,17 +403,33 @@ function DetectClapping(stream){
 
 module.exports = DetectClapping;
 
-},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/LaserSound.js":[function(require,module,exports){
-function LaserSound(stream){
-	console.log("[LaserSound]");
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/Player.js":[function(require,module,exports){
+function Player(context){
+	this.context = context;
 }
 
-LaserSound.playLaserSound = function(){
-	var sound = $('audio')[0];
-	sound.play();
+Player.prototype.play = function(sound){
+	var source = this.context.createBufferSource();
+	source.buffer = sound;
+	source.connect(this.context.destination);
+	source.start(0);
 };
 
-module.exports = LaserSound;
+module.exports = Player;
+
+},{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/audio/data_sound.json":[function(require,module,exports){
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+	"sets": [
+			{
+				"name": "LASER",
+				"file": "sound/laser.wav"
+			},
+			{
+				"name": "EXPLOSION",
+				"file": "sound/explosion.wav"
+			}
+	]
+}
 
 },{}],"/Users/zoevankuyk/Documents/Devine/2014 - 2015/RMDIII/RMDIII_OPDRACHT/code/proxy_in_blank/_js/modules/gameElements/Comet.js":[function(require,module,exports){
 var SVGHelper = require("../svg/SVGHelper");
@@ -373,7 +454,9 @@ function _create(){
 	this.element.setAttribute("cx",this.position.x);
 	this.element.setAttribute("cy",this.position.y);
 	this.element.setAttribute("r",this.radius);
-	this.element.setAttribute("fill",this.fill);
+	this.element.setAttribute("fill", this.fill);
+	this.element.setAttribute("stroke", "#843322");
+	this.element.setAttribute('stroke-width', 2);
 }
 
 function Comet(position){
@@ -471,7 +554,7 @@ function _message(tekst){
 
 	var n = new Notification("Nieuwe top 5!", {
 		body: tekst + ' staat nu in de top 5!',
-		icon: 'images/2.png'
+		icon: 'images/notification.png'
 	});
 	n.onshow = function (){
 		setTimeout(n.close.bind(n), ms);
@@ -484,7 +567,6 @@ function _initSocket(){
 }
 
 module.exports = (function(){
-	console.log("[Notification]");
 	socket = socket;
 	_initSocket();
 	_initNotification();
@@ -617,10 +699,8 @@ document.addEventListener("headtrackrStatus",function(event){
 	var messagep;
 	if (event.status in supportMessages){
       messagep = document.getElementById('gUMMessage');
-      //console.log("supportMessage",supportMessages[event.status]);
   }else if(event.status in statusMessages){
       messagep = document.getElementById('headtrackerMessage');
-      //console.log("statusMessage",statusMessages[event.status]);
   }
 },true);
 

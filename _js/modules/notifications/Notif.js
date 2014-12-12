@@ -24,7 +24,7 @@ function _message(tekst){
 
 	var n = new Notification("Nieuwe top 5!", {
 		body: tekst + ' staat nu in de top 5!',
-		icon: 'images/2.png'
+		icon: 'images/notification.png'
 	});
 	n.onshow = function (){
 		setTimeout(n.close.bind(n), ms);
@@ -37,7 +37,6 @@ function _initSocket(){
 }
 
 module.exports = (function(){
-	console.log("[Notification]");
 	socket = socket;
 	_initSocket();
 	_initNotification();

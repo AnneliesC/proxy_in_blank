@@ -20,7 +20,9 @@ function _create(){
 	this.element.setAttribute("cx",this.position.x);
 	this.element.setAttribute("cy",this.position.y);
 	this.element.setAttribute("r",this.radius);
-	this.element.setAttribute("fill",this.fill);
+	this.element.setAttribute("fill", this.fill);
+	this.element.setAttribute("stroke", "#843322");
+	this.element.setAttribute('stroke-width', 2);
 }
 
 function Comet(position){

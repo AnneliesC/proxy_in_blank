@@ -25,7 +25,6 @@ function _chkNotifiableClickHandler(event){
 }
 
 function _btnRetryClickHandler(event){
-	//event.preventDefault();
 	window.location = "/";
 }
 

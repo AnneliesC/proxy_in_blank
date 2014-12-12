@@ -459,48 +459,6 @@ header .gametitle {
   -o-animation: slideDown .8s;
   -ms-animation: slideDown .8s;
 }
-#game #btnback,
-#game #btninfo {
-  width: 32px;
-  height: 33px;
-  display: block;
-  position: absolute;
-  top: 10px;
-}
-#game #btnback span,
-#game #btninfo span {
-  visibility: hidden;
-}
-#game #btnback:hover,
-#game #btninfo:hover {
-  animation-timing-function: ease-in;
-  -moz-animation-timing-function: ease-in;
-  -webkit-animation-timing-function: ease-in;
-}
-#game #btnback {
-  background: url("../images/btn_back.png") no-repeat;
-  left: -2px;
-}
-#game #btnback:hover {
-  animation: darkerBack .3s;
-  -moz-animation: darkerBack .3s;
-  -webkit-animation: darkerBack .3s;
-  -o-animation: darkerBack .3s;
-  -ms-animation: darkerBack .3s;
-  background: url("../images/btn_back_hover.png") no-repeat;
-}
-#game #btninfo {
-  background: url("../images/btn_info.png") no-repeat;
-  right: 0;
-}
-#game #btninfo:hover {
-  animation: darkerInfo .3s;
-  -moz-animation: darkerInfo .3s;
-  -webkit-animation: darkerInfo .3s;
-  -o-animation: darkerInfo .3s;
-  -ms-animation: darkerInfo .3s;
-  background: url("../images/btn_info_hover.png") no-repeat;
-}
 #game svg {
   position: absolute;
   top: 0;

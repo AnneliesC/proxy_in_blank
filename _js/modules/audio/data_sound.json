@@ -1,0 +1,12 @@
+{
+	"sets": [
+			{
+				"name": "LASER",
+				"file": "sound/laser.wav"
+			},
+			{
+				"name": "EXPLOSION",
+				"file": "sound/explosion.wav"
+			}
+	]
+}

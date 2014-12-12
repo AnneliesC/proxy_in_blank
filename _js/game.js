@@ -1,5 +1,5 @@
 /* jshint newcap: false */
-/* globals Notification:true*/
+/* globals AudioContext:true*/
 
 require("./modules/util/Polyfill");
 
@@ -8,8 +8,10 @@ var Comet = require("./modules/gameElements/Comet");
 var Laser = require("./modules/gameElements/Laser");
 var Headtracker = require("./modules/video/Headtracker");
 var DetectClapping = require("./modules/audio/DetectClapping");
-var LaserSound = require("./modules/audio/LaserSound");
-var Notif = require("./modules/notifications/Notif");
+var BufferLoader = require('./modules/audio/BufferLoader');
+var Player = require('./modules/audio/Player');
+var sets = require('./modules/audio/data_sound').sets;
+require("./modules/notifications/Notif");
 
 var btnBack = document.getElementById("btnback");
 var btnInfo = document.getElementById("btninfo");
@@ -29,6 +31,8 @@ var gamePaused = false;
 var countdownInterval,timerInterval,cometsInterval;
 var score,time;
 var headtracker;
+var arrAudio;
+var player;
 
 /* API */
 
@@ -88,6 +92,7 @@ function _createLaser(){
 	});
 
 	bean.on(laser,"hit",function(){
+		player.play(arrAudio[1]);
 		svg.removeChild(laser.hit.element);
 		comets.splice(comets.indexOf(laser.hit),1);
 		svg.removeChild(laser.element);
@@ -97,7 +102,7 @@ function _createLaser(){
 	});
 
 	svg.appendChild(laser.element);
-	LaserSound.playLaserSound();
+	player.play(arrAudio[0]);
 	lasers.push(laser);
 }
 
@@ -153,10 +158,8 @@ function _gameOver(){
 	});
 
 	if(usersWithHigherScores.length <= 4){
-		console.log("top5");
 		document.getElementById("noTop5").setAttribute("class","display-none");
 	}else{
-		console.log("geen top5,loser");
 		document.getElementById("top5").setAttribute("class","display-none");
 		document.getElementById("noTop5").setAttribute("class","");
 	}
@@ -174,6 +177,7 @@ function _checkCollision(){
 		var comet = comets[i];
 		if( ((comet.position.x + comet.radius > xPos - spaceship.offsetWidth/2) && (comet.position.x - comet.radius < xPos + spaceship.offsetWidth/2)) && comet.position.y - comet.radius > spaceship.offsetTop){
 			_gameOver();
+			player.play(arrAudio[1]);
 		}
 	}
 }
@@ -250,6 +254,11 @@ function _initStream(stream){
 	if(highscores.getAttribute("class") !== "show"){ _startCountDown(); }
 }
 
+function _soundsLoaded(arr){
+	console.log("[SOUNDS] sounds loaded");
+	arrAudio = arr;
+}
+
 /* INIT */
 
 function _init(){
@@ -260,14 +269,19 @@ function _init(){
 		border: 10
 	};
 
-	//var laserSound = new LaserSound();
-
 	_getUserMedia();
 	if (navigator.getUserMedia) {
 		navigator.getUserMedia({audio: true, video: true}, _initStream, _userErrorHandler);
 	}else{
 		console.log("[Game] fallback");
 	}
+
+	//gamesound
+	var context = new AudioContext();
+	player = new Player(context);
+
+	var loader = new BufferLoader(context, sets, _soundsLoaded);
+	loader.load();
 
 	btnAgain.addEventListener("click", _btnAgainClickHandler);
 	btnBack.addEventListener("click", _btnBackClickHandler);
